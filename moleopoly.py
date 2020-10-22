@@ -2,14 +2,15 @@ from random import randint
 from chemlib import pte, Element
  
 class Board:
-    def __init__(self, players):
+    def __init__(self, *args):
+        self.players = [Player(name) for name in args]
+
         self.squares = set()
 
         while len(self.squares) < 20:
             self.squares.add(randint(1, 100))
 
         self.squares = sorted(list(self.squares))
-        self.players = players
         self.board = ["Go"] + self.squares
         self.board.insert(4, Utility("Bunsen Burner"))
         self.board.insert(7, Chance())
@@ -64,14 +65,15 @@ class Player:
         
     def move(self):
         self.position += self.roll_die()
-        if self.position > 30:
-            self.position -= 30
+        if self.position >= 31:
+            self.position -= 31
             self.currency += 10000
  
 if __name__ == "__main__":
     p1 = Player("Gowtham")
  
-    b = Board([p1])
+    b = Board(p1)
+    print(b.players)
     print(b.squares)
     print(b.board)
-    print(len(b.board))
+    print(b.board[1].FirstIonization)
