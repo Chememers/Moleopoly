@@ -1,6 +1,7 @@
 from random import randint
 from chemlib import pte, Element
- 
+
+
 class Board:
     def __init__(self, *args):
         self.players = [Player(name) for name in args]
@@ -28,12 +29,14 @@ class Board:
             if type(self.board[i]) is int:
                 self.board[i] = ElementSquare(self.board[i])
 
+
 class ElementSquare(Element):
     def __init__(self, atomic_number):
         sym = list(pte["Symbol"])
         super(ElementSquare, self).__init__(sym[atomic_number - 1])
         self.owned_by = None
         self.houses = []
+
 
 class Utility:
     def __init__(self, name):
@@ -42,9 +45,11 @@ class Utility:
         self.current_price = 200
         self.name = name
 
+
 class Chance:
     def __init__(self):
         pass
+
 
 class Player:
     def __init__(self, name):
@@ -52,8 +57,8 @@ class Player:
         self.position = 0
         self.doubles = False
         self.owned_elements = []
-        self.balance = 100000 #starting balance, in Joules
-    
+        self.balance = 100000  # starting balance, in Joules
+
     def roll_die(self):
         a = randint(1, 6)
         b = randint(1, 6)
@@ -62,16 +67,17 @@ class Player:
         else:
             self.doubles = False
         return a + b
-        
+
     def move(self):
         self.position += self.roll_die()
         if self.position >= 31:
             self.position -= 31
-            self.currency += 10000
- 
+            self.balance += 10000
+
+
 if __name__ == "__main__":
     p1 = Player("Gowtham")
- 
+
     b = Board(p1)
     print(b.players)
     print(b.squares)
