@@ -4,11 +4,28 @@ from chemlib import pte, Element
 class Board:
     def __init__(self, players):
         self.squares = set()
+
         while len(self.squares) < 20:
             self.squares.add(randint(1, 100))
+
         self.squares = sorted(list(self.squares))
         self.players = players
-        self.board = self.squares
+        self.board = ["Go"] + self.squares
+        self.board.insert(4, Utility("Bunsen Burner"))
+        self.board.insert(7, Chance())
+        self.board.insert(8, "Jail")
+        self.board.insert(12, Utility("Graduated Cylinder"))
+        self.board.insert(13, Chance())
+        self.board.insert(16, "Go Again")
+        self.board.insert(20, Utility("Buret"))
+        self.board.insert(23, Chance())
+        self.board.insert(24, "Go To Jail")
+        self.board.insert(28, Utility("Weight Scale"))
+        self.board.insert(29, Chance())
+
+        for i in range(len(self.board)):
+            if type(self.board[i]) is int:
+                self.board[i] = ElementSquare(self.board[i])
 
 class ElementSquare(Element):
     def __init__(self, atomic_number):
@@ -16,6 +33,17 @@ class ElementSquare(Element):
         super(ElementSquare, self).__init__(sym[atomic_number - 1])
         self.owned_by = None
         self.houses = []
+
+class Utility:
+    def __init__(self, name):
+        self.starting_price = 200
+        self.bidders = {}
+        self.current_price = 200
+        self.name = name
+
+class Chance:
+    def __init__(self):
+        pass
 
 class Player:
     def __init__(self, name):
@@ -45,6 +73,5 @@ if __name__ == "__main__":
  
     b = Board([p1])
     print(b.squares)
-
-    e = ElementSquare(1)
-    print(e.AtomicNumber)
+    print(b.board)
+    print(len(b.board))
