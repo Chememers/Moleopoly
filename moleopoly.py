@@ -28,7 +28,7 @@ class Player:
         self.position += self.roll_die()
  
 if __name__ == "__main__":
-    p1 = Player("Gowtham")
+    p1 = Player("Gowtham") #Testing
  
     b = Board([p1])
     print(b.squares)
