@@ -15,6 +15,7 @@ df = pd.read_csv("Questions.csv")
 questions = list(df["Question"])
 answers = list(df["Answer"])
 
+
 class Board:
     def __init__(self, *args):
         self.players = [Player(name) for name in args]
@@ -61,17 +62,18 @@ class Utility:
 
 
 class Chance:
-    qa = pd.read_csv("Questions.csv")
+    pass
+    # qa = pd.read_csv("Questions.csv")
 
-    @classmethod
-    def get_question(cls):
-        idx = cls.qa.shape[0]
+    # @classmethod
+    # def get_question(cls):
+    #     idx = cls.qa.shape[0]
 
-        return cls.qa
+    #     return cls.qa
 
-    def random_question():
-        rando = randint(0, len(questions) - 1)
-        return {questions[rando]: answers[rando]}
+    # def random_question():
+    #     rando = randint(0, len(questions) - 1)
+    #     return {questions[rando]: answers[rando]}
 
 
 class Player:

@@ -16,6 +16,18 @@ class Corner(Frame):
         self.config(highlightbackground="black", highlightthickness=1)
         self.text = text
         self.loc = loc
+        self.canv = Canvas(
+            self,
+            bg="#bdecb6",
+            width=145,
+            height=145,
+            bd=0,
+            highlightthickness=0,
+            relief=RIDGE,
+        )
+        self.canv.place(x=3, y=3)
+        self.canv.create_text((70, 70), text=self.text, font=Font(25), anchor=CENTER)
+
         self.put()
 
     def put(self):
@@ -91,18 +103,14 @@ class ElementSquareGUI(SquareGUI):
             )
             self.canv.place(x=3, y=3)
             self.canv.create_text(
-                (70, 32),
+                (70, 40),
                 text=self.square.Symbol,
                 fill="black",
                 anchor=CENTER,
-                font=Font(28),
+                font=Font(32),
             )
             self.canv.create_text(
-                (70, 10), text=f"{self.square.Element}", fill="#555555", anchor=CENTER, font=Font(12),
-            )
-
-            self.canv.create_text(
-                (70, 58), text=f"{round(float(self.square.FirstIonization))}", fill="#555555", anchor=CENTER, font=Font(12),
+                (70, 10), text="Element", fill="#555555", anchor=CENTER, font=Font(12),
             )
         else:
             angle = 270 if self.side == "N" else 90
@@ -117,24 +125,20 @@ class ElementSquareGUI(SquareGUI):
             )
             self.canv.place(x=3, y=3)
             self.canv.create_text(
-                (32, 70),
+                (40, 70),
                 text=self.square.Symbol,
                 fill="black",
                 anchor=CENTER,
-                font=Font(28),
+                font=Font(32),
                 angle=angle,
             )
             self.canv.create_text(
                 (10, 70),
-                text=f"{self.square.Element}",
+                text="Element",
                 fill="#555555",
                 anchor=CENTER,
                 font=Font(12),
                 angle=angle,
-            )
-            self.canv.create_text(
-                (58, 70), text=f"{round(float(self.square.FirstIonization))}", fill="#555555", anchor=CENTER, font=Font(12),
-                angle=angle
             )
 
 
@@ -151,7 +155,53 @@ class UtilityGUI(SquareGUI):
         super().__init__(master, side, idx)
 
         self.square = square
+        self.color = "white"
+        self.setup()
         self.put()
+
+    def setup(self):
+        if self.square.name == "Buret":
+            size = 24
+        else:
+            size = 12
+        if self.orient == "H":
+            self.canv = Canvas(
+                self.frame,
+                bg=self.color,
+                width=140,
+                height=65,
+                bd=0,
+                highlightthickness=0,
+                relief=RIDGE,
+            )
+            self.canv.place(x=3, y=3)
+            self.canv.create_text(
+                (70, 30),
+                text=self.square.name,
+                fill="black",
+                anchor=CENTER,
+                font=Font(size),
+            )
+        else:
+            angle = 270 if self.side == "N" else 90
+            self.canv = Canvas(
+                self.frame,
+                bg=self.color,
+                width=65,
+                height=140,
+                bd=0,
+                highlightthickness=0,
+                relief=RIDGE,
+            )
+            self.canv.place(x=3, y=3)
+            self.canv.create_text(
+                (30, 70),
+                text=self.square.name,
+                fill="black",
+                anchor=CENTER,
+                font=Font(size),
+                angle=angle,
+            )
 
 
 class GUI(Board):
@@ -190,26 +240,3 @@ win.geometry(f"{SIZE}x{SIZE}")
 win.resizable(False, False)
 game = GUI(win, players)
 win.mainloop()
-
-
-# def get_players():
-# players = []
-# print("=" * 10)
-# num = int(input("Number of Players: "))
-# for i in range(num):
-#     players.append(input(f"Name {i+1}: "))
-# print("=" * 10)
-# print("Starting game with: ", end="")
-# print(*players, sep=", ", end="\n")
-# print("=" * 10)
-# return players
-
-# players = get_players()
-
-# dirs = ("W", "N", "E", "S")
-# ranges = ((1, 8), (9, 16), (17, 24), (25, 32))
-# for i in range(4):
-#     for j in range(*ranges[i]):
-#         sq = self.squares[j]
-#         if isinstance(sq, ElementSquare):
-#             ElementSquareGUI(self.canvas, sq, dirs[i])
