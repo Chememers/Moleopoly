@@ -167,7 +167,43 @@ class ChanceGUI(SquareGUI):
         super().__init__(master, side, idx)
 
         self.square = square
+        self.setup()
         self.put()
+
+    def setup(self):
+        angles = {"S": 0, "W": 90, "N": 180, "E": 270}
+        if self.orient == "H":
+            self.canv = Canvas(
+                self.frame,
+                bg="white",
+                width=140,
+                height=65,
+                bd=0,
+                highlightthickness=0,
+                relief=RIDGE,
+            )
+            pos = (70, 30)
+        else:
+            self.canv = Canvas(
+                self.frame,
+                bg="white",
+                width=65,
+                height=140,
+                bd=0,
+                highlightthickness=0,
+                relief=RIDGE,
+            )
+            pos = (30, 70)
+
+        self.canv.place(x=3, y=3)
+        self.canv.create_text(
+            pos,
+            text="?",
+            font=Font(50),
+            fill="orange",
+            anchor=CENTER,
+            angle=angles[self.side],
+        )
 
 
 class UtilityGUI(SquareGUI):
@@ -251,14 +287,17 @@ class GUI(Board):
                     self.boxes[j] = UtilityGUI(self.win, self.board[j], dirs[i], index)
                 index += 1
 
-        self.center = Canvas(self.win, bg="white", width=500, height=500)
+        self.center = Canvas(self.win, bg="#bdecb6", width=500, height=500)
         self.center.place(x=160, y=160, anchor=NW)
+        self.center.create_text(
+            (250, 250), text="Mole-O-Poly", anchor=CENTER, font=Font(50)
+        )
 
 
 if __name__ == "__main__":
     players = ("Aditya", "Gowtham", "Hari")
     win = Tk()
-    win.config(bg="white")
+    win.config(bg="#bdecb6")
     win.geometry(f"{SIZE}x{SIZE}")
     win.resizable(False, False)
     game = GUI(win, players)
