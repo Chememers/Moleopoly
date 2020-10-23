@@ -34,8 +34,6 @@ while True:
 if cont == True:
     window.close()
 
-    players = ("Aditya", "Gowtham", "Hari")
-
     win = Tk()
     win.geometry(f"{SIZE}x{SIZE}")
     win.resizable(False, False)
