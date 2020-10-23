@@ -1,29 +1,39 @@
-from random import randint
+from random import randint, choice
 from chemlib import pte, Element
+
+Group1 = [1] + [choice([3, 11, 19]), choice([37, 55])]
+Group2 = [4] + [choice([12, 20, 38])]
+Group3 = [5] + [choice([13, 31]), 49]
+Group4 = [6] + [choice([14, 32, 50])]
+Group5 = [7] + [choice([15, 33]), choice([51, 83])]
+Group6 = [8] + [choice([15, 20, 38])]
+Group7 = [9] + [choice([17, 35]), choice([53, 85])]
+Group8 = [2] + [choice([10, 18, 36, 54, 86])]
 
 
 class Board:
     def __init__(self, *args):
         self.players = [Player(name) for name in args]
+        self.turn = 0
 
-        self.squares = set()
-
-        while len(self.squares) < 20:
-            self.squares.add(randint(1, 100))
-
-        self.squares = sorted(list(self.squares))
-        self.board = ["Go"] + self.squares
-        self.board.insert(4, Utility("Bunsen Burner"))
-        self.board.insert(7, Chance())
-        self.board.insert(8, "Jail")
-        self.board.insert(12, Utility("Graduated Cylinder"))
-        self.board.insert(13, Chance())
-        self.board.insert(16, "Mole Hole")
-        self.board.insert(20, Utility("Buret"))
-        self.board.insert(23, Chance())
-        self.board.insert(24, "Go To Jail")
-        self.board.insert(28, Utility("Weight Scale"))
-        self.board.insert(29, Chance())
+        self.board = (
+            ["Go"]
+            + Group1
+            + [Utility("Bunsen Burner")]
+            + Group2
+            + [Chance(), "Jail"]
+            + Group3
+            + [Utility("Graduated Cylinder"), Chance()]
+            + Group4
+            + ["Mole Hole"]
+            + Group5
+            + [Utility("Buret")]
+            + Group6
+            + [Chance(), "Go to Jail"]
+            + Group7
+            + [Utility("Weight Scale"), Chance()]
+            + Group8
+        )
 
         for i in range(len(self.board)):
             if type(self.board[i]) is int:
@@ -79,7 +89,5 @@ if __name__ == "__main__":
     p1 = Player("Gowtham")
 
     b = Board(p1)
-    print(b.players)
-    print(b.squares)
     print(b.board)
-    print(b.board[1].FirstIonization)
+    print(len(b.board))
