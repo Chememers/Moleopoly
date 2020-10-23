@@ -232,11 +232,10 @@ class GUI(Board):
                 index += 1
 
 
-players = ("Aditya", "Gowtham", "Hari")
-
-
-win = Tk()
-win.geometry(f"{SIZE}x{SIZE}")
-win.resizable(False, False)
-game = GUI(win, players)
-win.mainloop()
+if __name__ == "__main__":
+    players = ("Aditya", "Gowtham", "Hari")
+    win = Tk()
+    win.geometry(f"{SIZE}x{SIZE}")
+    win.resizable(False, False)
+    game = GUI(win, players)
+    win.mainloop()

@@ -1,3 +1,7 @@
+from gui import GUI
+from const import SIZE
+from tkinter import Tk
+
 import PySimpleGUI as sg
 
 sg.theme("DarkGreen1")
@@ -14,16 +18,27 @@ layout = [
 
 window = sg.Window("Mole-O-Poly", layout, element_justification="c")
 
+cont = False
 while True:
     event, values = window.read()
-    if (
-        event == sg.WIN_CLOSED or event == "Cancel"
-    ):  # if user closes window or clicks cancel
+    if event == sg.WIN_CLOSED or event == "Cancel":
+        cont = False
         break
     if event in ("Add Player"):
         players.append(values["Name"])
         window.Element("players").Update(values=players)
+    if event in ("Play!") and len(players) > 0:
+        cont = True
+        break
 
-    # print('You entered ', values[0])
+if cont == True:
+    window.close()
 
-window.close()
+    players = ("Aditya", "Gowtham", "Hari")
+
+    win = Tk()
+    win.geometry(f"{SIZE}x{SIZE}")
+    win.resizable(False, False)
+    game = GUI(win, players)
+    win.mainloop()
+
