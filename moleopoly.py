@@ -1,5 +1,6 @@
 from random import randint, choice
 from chemlib import pte, Element
+import pandas as pd
 
 Group1 = [1] + [choice([3, 11, 19]), choice([37, 55])]
 Group2 = [4] + [choice([12, 20, 38])]
@@ -9,6 +10,10 @@ Group5 = [7] + [choice([15, 33]), choice([51, 83])]
 Group6 = [8] + [choice([15, 20, 38])]
 Group7 = [9] + [choice([17, 35]), choice([53, 85])]
 Group8 = [2] + [choice([10, 18, 36, 54, 86])]
+
+df = pd.read_csv("Questions.csv")
+questions = list(df["Question"])
+answers = list(df["Answer"])
 
 class Board:
     def __init__(self, *args):
@@ -42,6 +47,9 @@ class Chance:
     def __init__(self):
         pass
 
+    def random_question():
+        rando = randint(0, len(questions) - 1)
+
 
 class Player:
     def __init__(self, name):
@@ -73,3 +81,6 @@ if __name__ == "__main__":
     b = Board(p1)
     print(b.board)
     print(len(b.board))
+
+    print(b.board[1].FirstIonization)
+    print(questions)
