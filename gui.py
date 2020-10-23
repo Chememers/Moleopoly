@@ -181,15 +181,15 @@ class GUI(Board):
                     self.boxes[j] = UtilityGUI(self.win, self.board[j], dirs[i], index)
                 index += 1
 
+if __name__ == "__main__":
+    players = ("Aditya", "Gowtham", "Hari")
 
-players = ("Aditya", "Gowtham", "Hari")
 
-
-win = Tk()
-win.geometry(f"{SIZE}x{SIZE}")
-win.resizable(False, False)
-game = GUI(win, players)
-win.mainloop()
+    win = Tk()
+    win.geometry(f"{SIZE}x{SIZE}")
+    win.resizable(False, False)
+    game = GUI(win, players)
+    win.mainloop()
 
 
 # def get_players():
