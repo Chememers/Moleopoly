@@ -91,14 +91,18 @@ class ElementSquareGUI(SquareGUI):
             )
             self.canv.place(x=3, y=3)
             self.canv.create_text(
-                (70, 40),
+                (70, 32),
                 text=self.square.Symbol,
                 fill="black",
                 anchor=CENTER,
-                font=Font(32),
+                font=Font(28),
             )
             self.canv.create_text(
-                (70, 10), text="Element", fill="#555555", anchor=CENTER, font=Font(12),
+                (70, 10), text=f"{self.square.Element}", fill="#555555", anchor=CENTER, font=Font(12),
+            )
+
+            self.canv.create_text(
+                (70, 58), text=f"{round(float(self.square.FirstIonization))}", fill="#555555", anchor=CENTER, font=Font(12),
             )
         else:
             angle = 270 if self.side == "N" else 90
@@ -113,20 +117,24 @@ class ElementSquareGUI(SquareGUI):
             )
             self.canv.place(x=3, y=3)
             self.canv.create_text(
-                (40, 70),
+                (32, 70),
                 text=self.square.Symbol,
                 fill="black",
                 anchor=CENTER,
-                font=Font(32),
+                font=Font(28),
                 angle=angle,
             )
             self.canv.create_text(
                 (10, 70),
-                text="Element",
+                text=f"{self.square.Element}",
                 fill="#555555",
                 anchor=CENTER,
                 font=Font(12),
                 angle=angle,
+            )
+            self.canv.create_text(
+                (58, 70), text=f"{round(float(self.square.FirstIonization))}", fill="#555555", anchor=CENTER, font=Font(12),
+                angle=angle
             )
 
 
