@@ -1,5 +1,5 @@
 from tkinter import Tk, Frame, Canvas
-from tkinter.constants import BOTH, CENTER, RIDGE
+from tkinter.constants import BOTH, CENTER, NW, RIDGE
 from moleopoly import Board, ElementSquare, Chance, Utility
 from const import SIZE
 
@@ -103,7 +103,7 @@ class ElementSquareGUI(SquareGUI):
             )
             self.canv.place(x=3, y=3)
             self.canv.create_text(
-                (70, 40),
+                (70, 30),
                 text=self.square.Symbol,
                 fill="black",
                 anchor=CENTER,
@@ -129,21 +129,14 @@ class ElementSquareGUI(SquareGUI):
             )
             self.canv.place(x=3, y=3)
             self.canv.create_text(
-                (40, 70),
+                (30, 70),
                 text=self.square.Symbol,
                 fill="black",
                 anchor=CENTER,
                 font=Font(32),
                 angle=angle,
             )
-            self.canv.create_text(
-                (10, 70),
-                text="Element",
-                fill="#555555",
-                anchor=CENTER,
-                font=Font(12),
-                angle=angle,
-            )
+
             self.canv.create_text(
                 (58, 70),
                 text=f"{round(float(self.square.AtomicNumber))}",
@@ -243,10 +236,14 @@ class GUI(Board):
                     self.boxes[j] = UtilityGUI(self.win, self.board[j], dirs[i], index)
                 index += 1
 
+        self.center = Canvas(self.win, bg="white", width=500, height=500)
+        self.center.place(x=160, y=160, anchor=NW)
+
 
 if __name__ == "__main__":
     players = ("Aditya", "Gowtham", "Hari")
     win = Tk()
+    win.config(bg="white")
     win.geometry(f"{SIZE}x{SIZE}")
     win.resizable(False, False)
     game = GUI(win, players)
