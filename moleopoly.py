@@ -1,12 +1,13 @@
 from random import randint, choice
 from chemlib import pte, Element
+import pandas as pd
 
 Group1 = [1] + [choice([3, 11, 19]), choice([37, 55])]
 Group2 = [4] + [choice([12, 20, 38])]
 Group3 = [5] + [choice([13, 31]), 49]
 Group4 = [6] + [choice([14, 32, 50])]
 Group5 = [7] + [choice([15, 33]), choice([51, 83])]
-Group6 = [8] + [choice([15, 20, 38])]
+Group6 = [8] + [choice([16, 34, 42])]
 Group7 = [9] + [choice([17, 35]), choice([53, 85])]
 Group8 = [2] + [choice([10, 18, 36, 54, 86])]
 
@@ -57,8 +58,13 @@ class Utility:
 
 
 class Chance:
-    def __init__(self):
-        pass
+    qa = pd.read_csv("Questions.csv")
+
+    @classmethod
+    def get_question(cls):
+        idx = cls.qa.shape[0]
+
+        return cls.qa
 
 
 class Player:

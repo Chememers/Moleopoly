@@ -1,9 +1,13 @@
-from tkinter import Tk, Frame
-from tkinter.constants import BOTH
+from tkinter import Tk, Frame, Canvas
+from tkinter.constants import BOTH, CENTER, RIDGE
 from moleopoly import Board, ElementSquare, Chance, Utility
-from const import CENTERSIZE, SIZE, SQSHORT, SQLONG
+from const import SIZE
 
 # fill="#74BBFB"
+
+
+def Font(size):
+    return ("Calibri", size, "bold")
 
 
 class Corner(Frame):
@@ -24,6 +28,10 @@ class SquareGUI:
     def __init__(self, master, side, index):
         self.win = master
         self.side = side
+        if self.side == "W" or self.side == "E":
+            self.orient = "H"
+        else:
+            self.orient = "V"
         self.idx = index
 
         self.frame = Frame(
@@ -31,7 +39,7 @@ class SquareGUI:
         )
 
     def put(self):
-        if self.side == "W" or self.side == "E":
+        if self.orient == "H":
             self.frame.config(width=150, height=75)
             if self.side == "W":
                 self.frame.grid(row=8 - self.idx, column=0, columnspan=2)
@@ -46,11 +54,80 @@ class SquareGUI:
 
 
 class ElementSquareGUI(SquareGUI):
+    COLORS = (
+        None,
+        "#51c447",
+        "#7beb71",
+        "#8ab0e6",
+        "#c187ff",
+        "#f7a659",
+        "#f0f266",
+        "#f06565",
+        "#ababab",
+    )
+
     def __init__(self, master, square: ElementSquare, side, idx):
         super().__init__(master, side, idx)
-
         self.square = square
+        grp = int(self.square.Group)
+        if grp > 10:
+            grp -= 10
+        self.color = self.COLORS[grp]
+        self.frame.config(bg=self.color)
+
+        self.setup()
         self.put()
+
+    def setup(self):
+        if self.orient == "H":
+            self.canv = Canvas(
+                self.frame,
+                bg=self.color,
+                width=140,
+                height=65,
+                bd=0,
+                highlightthickness=0,
+                relief=RIDGE,
+            )
+            self.canv.place(x=3, y=3)
+            self.canv.create_text(
+                (70, 40),
+                text=self.square.Symbol,
+                fill="black",
+                anchor=CENTER,
+                font=Font(32),
+            )
+            self.canv.create_text(
+                (70, 10), text="Element", fill="#555555", anchor=CENTER, font=Font(12),
+            )
+        else:
+            angle = 270 if self.side == "N" else 90
+            self.canv = Canvas(
+                self.frame,
+                bg=self.color,
+                width=65,
+                height=140,
+                bd=0,
+                highlightthickness=0,
+                relief=RIDGE,
+            )
+            self.canv.place(x=3, y=3)
+            self.canv.create_text(
+                (40, 70),
+                text=self.square.Symbol,
+                fill="black",
+                anchor=CENTER,
+                font=Font(32),
+                angle=angle,
+            )
+            self.canv.create_text(
+                (10, 70),
+                text="Element",
+                fill="#555555",
+                anchor=CENTER,
+                font=Font(12),
+                angle=angle,
+            )
 
 
 class ChanceGUI(SquareGUI):
@@ -95,15 +172,6 @@ class GUI(Board):
                 elif isinstance(self.board[j], Utility):
                     self.boxes[j] = UtilityGUI(self.win, self.board[j], dirs[i], index)
                 index += 1
-
-        # for i in range(2, 9):
-        #     Frame(
-        #         self.win,
-        #         width=75,
-        #         height=150,
-        #         highlightbackground="black",
-        #         highlightthickness=1,
-        #     ).grid(row=0, column=i, rowspan=2)
 
 
 players = ("Aditya", "Gowtham", "Hari")
