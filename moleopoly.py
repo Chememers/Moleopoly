@@ -11,16 +11,36 @@ Group6 = [8] + [choice([15, 20, 38])]
 Group7 = [9] + [choice([17, 35]), choice([53, 85])]
 Group8 = [2] + [choice([10, 18, 36, 54, 86])]
 
+<<<<<<< HEAD
 df = pd.read_csv("Questions.csv")
 questions = list(df["Question"])
 answers = list(df["Answer"])
+=======
+>>>>>>> bafa7684eec3ae53cc8becb29b221b0f0eb989cf
 
 class Board:
     def __init__(self, *args):
         self.players = [Player(name) for name in args]
         self.turn = 0
 
-        self.board = ["Go"] + Group1 + [Utility("Bunsen Burner")] + Group2 + [Chance(), "Jail"] + Group3 + [Utility("Graduated Cylinder"), Chance()] + Group4 + ['Go Again'] +Group5 + [Utility("Buret")] + Group6 + [Chance(), "Go to Jail"] + Group7 + [Utility("Weight Scale"), Chance()] + Group8
+        self.board = (
+            ["Go"]
+            + Group1
+            + [Utility("Bunsen Burner")]
+            + Group2
+            + [Chance(), "Jail"]
+            + Group3
+            + [Utility("Graduated Cylinder"), Chance()]
+            + Group4
+            + ["Mole Hole"]
+            + Group5
+            + [Utility("Buret")]
+            + Group6
+            + [Chance(), "Go to Jail"]
+            + Group7
+            + [Utility("Weight Scale"), Chance()]
+            + Group8
+        )
 
         for i in range(len(self.board)):
             if type(self.board[i]) is int:
