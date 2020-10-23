@@ -18,7 +18,7 @@ class Board:
         self.board.insert(8, "Jail")
         self.board.insert(12, Utility("Graduated Cylinder"))
         self.board.insert(13, Chance())
-        self.board.insert(16, "Go Again")
+        self.board.insert(16, "Mole Hole")
         self.board.insert(20, Utility("Buret"))
         self.board.insert(23, Chance())
         self.board.insert(24, "Go To Jail")
