@@ -11,12 +11,9 @@ Group6 = [8] + [choice([15, 20, 38])]
 Group7 = [9] + [choice([17, 35]), choice([53, 85])]
 Group8 = [2] + [choice([10, 18, 36, 54, 86])]
 
-<<<<<<< HEAD
 df = pd.read_csv("Questions.csv")
 questions = list(df["Question"])
 answers = list(df["Answer"])
-=======
->>>>>>> bafa7684eec3ae53cc8becb29b221b0f0eb989cf
 
 class Board:
     def __init__(self, *args):
@@ -69,6 +66,7 @@ class Chance:
 
     def random_question():
         rando = randint(0, len(questions) - 1)
+        return {questions[rando]: answers[rando]}
 
 
 class Player:
@@ -102,5 +100,4 @@ if __name__ == "__main__":
     print(b.board)
     print(len(b.board))
 
-    print(b.board[1].FirstIonization)
-    print(questions)
+    print(b.board)
