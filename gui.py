@@ -117,7 +117,7 @@ class ElementSquareGUI(SquareGUI):
                 font=Font(12),
             )
             self.canv.create_text(
-                (70, 10),
+                (70, 8),
                 text=self.square.Element,
                 fill="#555555",
                 anchor=CENTER,
@@ -145,7 +145,7 @@ class ElementSquareGUI(SquareGUI):
                 angle=angle,
             )
             self.canv.create_text(
-                (10, 70),
+                (8, 70),
                 text=self.square.Element,
                 fill="#555555",
                 anchor=CENTER,
