@@ -1,42 +1,54 @@
+from tkinter import *
 from gui import GUI
 from const import SIZE
-from tkinter import Tk
 
-import PySimpleGUI as sg
-
-sg.theme("DarkGreen1")
+win = Tk()
+win.title("New Game")
 
 players = []
 
-layout = [
-    [sg.Text("New Game", font=("Comic Sans MS", 20))],
-    [sg.InputText(key="Name"), sg.Button("Add Player")],
-    [sg.Text("Players:", font=("Comic Sans MS", 20))],
-    [sg.Listbox(values=players, key="players", size=(30, 6))],
-    [sg.Button("Play!"), sg.Button("Cancel")],
-]
+C = Canvas(win, bg="blue", height=250, width=550)
+filename = PhotoImage(file = r"moleopoly background.png")
+background_label = Label(win, image=filename)
+background_label.place(x=0, y=0, relwidth=1, relheight=1)
 
-window = sg.Window("Mole-O-Poly", layout, element_justification="c")
+def add_player():
+    if e.get() != "" and len(players) < 4:
+        players.append(e.get())
+        listbox.insert(END, e.get())
 
-cont = False
-while True:
-    event, values = window.read()
-    if event == sg.WIN_CLOSED or event == "Cancel":
-        cont = False
-        break
-    if event in ("Add Player"):
-        players.append(values["Name"])
-        window.Element("players").Update(values=players)
-    if event in ("Play!") and len(players) > 0:
-        cont = True
-        break
+def start():
+    if len(players) > 0:
+        win.destroy()
 
-if cont == True:
-    window.close()
+title = Label(win, text="Mole - O - Poly", bg="#34b3ac", fg="white", font=("Comic Sans MS", 24))
+b1 = Button(win, text="Add Player", bg="orange", fg="white", font='sans 12 bold',width=20, command=add_player)
+e = Entry(win, text="Player Name", width=34)
 
-    win = Tk()
-    win.geometry(f"{SIZE}x{SIZE}")
-    win.resizable(False, False)
-    game = GUI(win, players)
-    win.mainloop()
+t = Label(win, text="Players:", bg="#34b3ac", fg="white", font=("Comic Sans MS", 16))
+listbox = Listbox(win, height = 4,  
+                  width = 23,  
+                  bg = "white", 
+                  activestyle = 'dotbox',  
+                  font = "sans 12 bold", 
+                  fg = "#34b3ac") 
+
+play = Button(win, text="Play!", bg="#2fba46", fg="white", font='sans 12 bold', width=10, command=start)
+
+e.place(x=10, y=60)
+e.insert(END, 'Player Name')
+b1.place(x=10, y = 90)
+title.place(x=0, y=0)
+t.place(x=10, y=130)
+listbox.place(x = 10, y = 165)
+play.place(x=357, y=10)
+
+C.pack()
+win.mainloop()
+
+win = Tk()
+win.geometry(f"{SIZE}x{SIZE}")
+win.resizable(False, False)
+game = GUI(win, players)
+win.mainloop()
 
