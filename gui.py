@@ -1,5 +1,5 @@
 from tkinter import Tk, Canvas
-from tkinter.constants import CENTER, RIDGE
+from tkinter.constants import CENTER, NW, RIDGE
 from moleopoly import Board, ElementSquare, Chance, Utility
 from const import SIZE
 
@@ -174,11 +174,44 @@ class UtilityGUI(SquareGUI):
         self.add_child("txt", Text(self.square.name, (75, 30), size))
 
 
+class InfoDisplay(Canvas):
+    def __init__(self, master, players):
+        super().__init__(bg="#D0B0D0", width=460, height=120)
+        colors = ["red", "green", "blue", "yellow"]
+
+        # self.create_text((230, 20), text="Players", font=Font(18))
+        for i in range(2):
+            self.create_rectangle(
+                20, (i + 1) * 35, 40, ((i + 1) * 35) + 20, fill=colors[i]
+            )
+
+        for i in range(2):
+            self.create_rectangle(
+                220, (i + 1) * 35, 240, ((i + 1) * 35) + 20, fill=colors[i + 2]
+            )
+
+        for i in range(len(players)):
+            if i < 2:
+                x = 50
+                col = i + 1
+            else:
+                x = 250
+                col = i - 1
+            self.create_text(
+                (x, (col) * 35 + 10),
+                text=players[i],
+                fill="white",
+                font=Font(12),
+                anchor="w",
+            )
+
+
 class GUI(Board):
     def __init__(self, master, players: list):
         super().__init__(*players)
         self.win = master
         self.boxes = [None for _ in range(32)]
+        self.players = players
         self.setup_board()
 
     def setup_board(self):
@@ -201,9 +234,17 @@ class GUI(Board):
                     self.boxes[j] = UtilityGUI(self.win, self.board[j], dirs[i], index)
                 index += 1
 
+        self.center = Canvas(self.win, bg="#bdecb6", width=500, height=500)
+        self.center.place(x=160, y=160, anchor=NW)
+        self.center.create_text(
+            (250, 40), text="Mole-O-Poly", anchor=CENTER, font=Font(50)
+        )
+        self.info = InfoDisplay(self.win, self.players)
+        self.info.place(x=180, y=250, anchor=NW)
+
 
 if __name__ == "__main__":
-    players = ("Aditya", "Gowtham", "Hari")
+    players = ("Aditya", "Gowtham", "Hari", "W")
     win = Tk()
     win.config(bg="#bdecb6")
     win.geometry(f"{SIZE}x{SIZE}")
