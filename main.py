@@ -46,9 +46,10 @@ play.place(x=357, y=10)
 C.pack()
 win.mainloop()
 
-win = Tk()
-win.geometry(f"{SIZE}x{SIZE}")
-win.resizable(False, False)
-game = GUI(win, players)
-win.mainloop()
+if len(players) > 1:
+    win = Tk()
+    win.geometry(f"{SIZE}x{SIZE}")
+    win.resizable(False, False)
+    game = GUI(win, players)
+    win.mainloop()
 
