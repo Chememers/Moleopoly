@@ -193,7 +193,7 @@ class InfoDisplay(Canvas):
 
             self.create_rectangle(rx, col*35, ry, (col*35) + 20, fill=colors[i])
             self.create_text((x, (col) * 35 + 10), text=players[i].name, fill="white", font=Font(12), anchor="w")
-            self.create_text((x + 190, (col) * 35 + 10), text=players[i].balance, fill="white", font=Font(12), anchor="e")
+            self.create_text((x + 160, (col) * 35 + 10), text=(f"{players[i].balance} KJ"), fill="white", font=Font(12), anchor="e")
 
 
 class GUI(Board):
