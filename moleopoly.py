@@ -11,7 +11,7 @@ Group6 = [8] + [choice([16, 34, 42])]
 Group7 = [9] + [choice([17, 35]), choice([53, 85])]
 Group8 = [2] + [choice([10, 18, 36, 54, 86])]
 
-df = pd.read_csv("Questions.csv")
+df = pd.read_csv(r"resources\Questions.csv")
 questions = list(df["Question"])
 answers = list(df["Answer"])
 
@@ -63,7 +63,7 @@ class Utility:
 
 class Chance:
     pass
-    # qa = pd.read_csv("Questions.csv")
+    # qa = pd.read_csv(r"resources\Questions.csv")
 
     # @classmethod
     # def get_question(cls):

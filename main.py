@@ -8,7 +8,7 @@ win.title("New Game")
 players = []
 
 C = Canvas(win, bg="blue", height=250, width=550)
-filename = PhotoImage(file = r"moleopoly background.png")
+filename = PhotoImage(file = r"resources\moleopoly background.png")
 background_label = Label(win, image=filename)
 background_label.place(x=0, y=0, relwidth=1, relheight=1)
 
