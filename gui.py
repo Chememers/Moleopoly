@@ -184,16 +184,28 @@ class InfoDisplay(Canvas):
         self.config(
             highlightthickness=0.5, highlightbackground="black",
         )
-        colors = ["red", "green", "blue", "yellow"]
-
-        for i in range(len(players)):
+        self.players = players
+        self.colors = ["red", "green", "blue", "yellow"]
+        self.update(0)
+    
+    def update(self, turn):
+        self.delete("all")
+        for i in range(len(self.players)):
             if i < 2: x = 50; col = i + 1 
-            else: x = 250; col = i - 1
+            else: x = 275; col = i - 1
             rx = x - 30; ry = x-10
 
-            self.create_rectangle(rx, col*35, ry, (col*35) + 20, fill=colors[i])
-            self.create_text((x, (col) * 35 + 10), text=players[i].name, fill="white", font=Font(12), anchor="w")
-            self.create_text((x + 160, (col) * 35 + 10), text=(f"{players[i].balance} KJ"), fill="white", font=Font(12), anchor="e")
+            self.create_rectangle(rx, col*35, ry, (col*35) + 20, fill=self.colors[i])
+            #fill = "white" if turn != i else "green"
+            self.create_text((x, (col) * 35 + 10), text=self.players[i].name, fill="white", font=Font(12), anchor="w")
+            self.create_text((x + 170, (col) * 35 + 10), text=(f"{self.players[i].balance} KJ"), fill="white", font=Font(12), anchor="e")
+        
+        #Show Active Player:
+        x, y = (45, 30); w = 180; h = 35
+        if turn > 1: x += 225
+        if turn % 2 != 0: y += 35
+
+        self.create_rectangle(x, y, x+ w, y + h, outline="#9BF62E", width=3)
 
 
 class GUI(Board):
@@ -237,7 +249,6 @@ class GUI(Board):
         )
         self.info = InfoDisplay(self.win, self.players)
         self.info.place(x=180, y=250, anchor=NW)
-
 
 if __name__ == "__main__":
     players = ("Aditya", "Gowtham", "Hari", "W")
