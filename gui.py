@@ -179,31 +179,14 @@ class InfoDisplay(Canvas):
         super().__init__(bg="#D0B0D0", width=460, height=120)
         colors = ["red", "green", "blue", "yellow"]
 
-        # self.create_text((230, 20), text="Players", font=Font(18))
-        for i in range(2):
-            self.create_rectangle(
-                20, (i + 1) * 35, 40, ((i + 1) * 35) + 20, fill=colors[i]
-            )
-
-        for i in range(2):
-            self.create_rectangle(
-                220, (i + 1) * 35, 240, ((i + 1) * 35) + 20, fill=colors[i + 2]
-            )
-
         for i in range(len(players)):
-            if i < 2:
-                x = 50
-                col = i + 1
-            else:
-                x = 250
-                col = i - 1
-            self.create_text(
-                (x, (col) * 35 + 10),
-                text=players[i],
-                fill="white",
-                font=Font(12),
-                anchor="w",
-            )
+            if i < 2: x = 50; col = i + 1 
+            else: x = 250; col = i - 1
+            rx = x - 30; ry = x-10
+
+            self.create_rectangle(rx, col*35, ry, (col*35) + 20, fill=colors[i])
+            self.create_text((x, (col) * 35 + 10), text=players[i].name, fill="white", font=Font(12), anchor="w")
+            self.create_text((x + 190, (col) * 35 + 10), text=players[i].balance, fill="white", font=Font(12), anchor="e")
 
 
 class GUI(Board):
@@ -211,7 +194,6 @@ class GUI(Board):
         super().__init__(*players)
         self.win = master
         self.boxes = [None for _ in range(32)]
-        self.players = players
         self.setup_board()
 
     def setup_board(self):
