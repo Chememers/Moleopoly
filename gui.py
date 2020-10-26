@@ -1,7 +1,7 @@
 from tkinter import Tk, Canvas
 from tkinter.constants import CENTER, NW, RIDGE
 from moleopoly import Board, ElementSquare, Chance, Utility
-from const import SIZE
+from const import SQLONG, SQSHORT
 
 
 def Font(size):
@@ -29,13 +29,17 @@ class Text:
 
 class Corner(Canvas):
     def __init__(self, root, text, loc):
-        super().__init__(root, height=150, width=150)
+        super().__init__(root, height=SQLONG, width=SQLONG)
         self.config(
-            bg="#CCCCCC", bd=0, highlightthickness=0, relief=RIDGE,
+            bg="#CCCCCC",
+            bd=0,
+            highlightthickness=0.5,
+            relief=RIDGE,
+            highlightbackground="black",
         )
         self.text = text
         self.loc = loc
-        self.create_text((75, 75), text=text, font=Font(25), anchor=CENTER)
+        self.create_text((SQSHORT, SQSHORT), text=text, font=Font(25), anchor=CENTER)
         self.put()
 
     def put(self):
@@ -48,11 +52,11 @@ class SquareGUI:
     def __init__(self, master, side, index):
         self.grid_config = {}
         self.canv_config = {
-            "width": 150,
-            "height": 75,
+            "width": SQLONG,
+            "height": SQSHORT,
             "bg": "#FFFFFF",
-            "bd": 0,
-            "highlightthickness": 0,
+            "highlightbackground": "black",
+            "highlightthickness": 0.5,
             "relief": RIDGE,
         }
         # DEFAULT TO WEST EAST, ROTATE WILL MUTATE
@@ -90,14 +94,14 @@ class SquareGUI:
         if angle == 180:
             for text in self.children["txt"]:
                 text.angle = 180
-                text.location = (150 - text.location[0], 75 - text.location[1])
+                text.location = (SQLONG - text.location[0], SQSHORT - text.location[1])
         else:
-            self.canv_config["width"] = 75
-            self.canv_config["height"] = 150
+            self.canv_config["width"] = SQSHORT
+            self.canv_config["height"] = SQLONG
             for text in self.children["txt"]:
                 text.angle = angle
                 if angle == 90:
-                    text.location = (75 - text.location[1], text.location[0])
+                    text.location = (SQSHORT - text.location[1], text.location[0])
                 else:
                     text.location = (text.location[1], text.location[0])
 
@@ -137,11 +141,11 @@ class ElementSquareGUI(SquareGUI):
         self.put()
 
     def setup(self):
-        self.add_child("txt", Text(self.square.Symbol, (75, 32), 32))
+        self.add_child("txt", Text(self.square.Symbol, (SQSHORT, 32), 32))
         self.add_child(
-            "txt", Text(f"{round(float(self.square.AtomicNumber))}", (75, 58), 12)
+            "txt", Text(f"{round(float(self.square.AtomicNumber))}", (SQSHORT, 58), 12)
         )
-        self.add_child("txt", Text(self.square.Element, (75, 8), 12))
+        self.add_child("txt", Text(self.square.Element, (SQSHORT, 8), 12))
 
 
 class ChanceGUI(SquareGUI):
@@ -154,7 +158,7 @@ class ChanceGUI(SquareGUI):
         self.put()
 
     def setup(self):
-        self.add_child("txt", Text("?", (75, 35), 50, "orange"))
+        self.add_child("txt", Text("?", (SQSHORT, 35), 50, "orange"))
 
 
 class UtilityGUI(SquareGUI):
@@ -171,12 +175,15 @@ class UtilityGUI(SquareGUI):
             size = 24
         else:
             size = 12
-        self.add_child("txt", Text(self.square.name, (75, 30), size))
+        self.add_child("txt", Text(self.square.name, (SQSHORT, 30), size))
 
 
 class InfoDisplay(Canvas):
     def __init__(self, master, players):
         super().__init__(bg="#D0B0D0", width=460, height=120)
+        self.config(
+            highlightthickness=0.5, highlightbackground="black",
+        )
         colors = ["red", "green", "blue", "yellow"]
 
         for i in range(len(players)):
@@ -216,7 +223,14 @@ class GUI(Board):
                     self.boxes[j] = UtilityGUI(self.win, self.board[j], dirs[i], index)
                 index += 1
 
-        self.center = Canvas(self.win, bg="#bdecb6", width=500, height=500)
+        self.center = Canvas(
+            self.win,
+            bg="#bdecb6",
+            width=500,
+            height=500,
+            highlightthickness=0.5,
+            highlightbackground="black",
+        )
         self.center.place(x=160, y=160, anchor=NW)
         self.center.create_text(
             (250, 40), text="Mole-O-Poly", anchor=CENTER, font=Font(50)
@@ -229,7 +243,7 @@ if __name__ == "__main__":
     players = ("Aditya", "Gowtham", "Hari", "W")
     win = Tk()
     win.config(bg="#bdecb6")
-    win.geometry(f"{SIZE}x{SIZE}")
     win.resizable(False, False)
     game = GUI(win, players)
+    win.update_idletasks()
     win.mainloop()
