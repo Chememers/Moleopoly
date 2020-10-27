@@ -209,17 +209,18 @@ class InfoDisplay(Canvas):
 
 
 class Piece(Player):
-    def __init__(self, master, name: str) -> None:
+    def __init__(self, boxes, name: str) -> None:
         super().__init__(name)
-        self.win = master
+        self.boxes = boxes
     
     def coord(self):
-        dirs = {"W": ("x", 20), "N": ("y", 20), "E": ("x", 600), "S": ("y", 600)}
-        spacing = 50
-        orient = dirs[list(dirs.keys())[self.position // 9]]
-        other = "x" if orient[0] == "y" else "y"
-
-        return {orient[0]: orient[1], other: spacing * self.position // 9}
+        pos = self.boxes[self.position]
+    
+    def draw(self):
+        x = self.coord()["x"]; y = self.coord()["y"]
+        self.canv = Canvas(self.win, bg = "red", width=20, height=20)
+        self.canv.place(x = x, y = y)
+        #self.win.create_rectangle(x, y, x+10, y+10)
 
 class GUI(Board):
     def __init__(self, master, players: list):
@@ -263,8 +264,13 @@ class GUI(Board):
         self.info = InfoDisplay(self.win, self.players)
         self.info.place(x=180, y=250, anchor=NW)
 
-        p = Piece(self.win, self.current_player())
-        print(p.coord())
+        p = Piece(self, self.current_player())
+
+        p.draw()
+        for i in range(10):
+            input()
+            p.position += 1
+            p.draw()
 
 
 def run(players):
@@ -277,6 +283,6 @@ def run(players):
 
 
 if __name__ == "__main__":
-    players = ("Aditya", "Gowtham", "Hari", "W")
+    players = ("Aditya", "Gowtham", "Hari")
     run(players)
 
