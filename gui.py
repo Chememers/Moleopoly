@@ -232,11 +232,10 @@ class InfoDisplay(Canvas):
 
 
 class Dice:
-    IMG = {i: PhotoImage(rf"dice\dice_{i}") for i in range(1, 7)}
-
     def __init__(self, canv: Canvas):
+        self.img = {i: PhotoImage(rf"dice\dice_{i}") for i in range(1, 7)}
         self.canv = canv
-        self.canv.create_image()
+        # self.canv.create_image()
 
     def roll(self, player: Player):
         a, b, _ = player.roll_die()
