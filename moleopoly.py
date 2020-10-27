@@ -85,7 +85,7 @@ class Player:
         self.position = 0
         self.doubles = False
         self.owned_elements = []
-        self.balance = 100000  # starting balance, in Joules
+        self.balance = 7500  # starting balance, in Joules
 
     def roll_die(self):
         a = randint(1, 6)
