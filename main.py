@@ -1,6 +1,5 @@
 from tkinter import *
-from gui import GUI
-from const import SIZE
+from gui import GUI, run
 
 win = Tk()
 win.title("New Game")
@@ -17,6 +16,7 @@ def add_player():
     if e.get() != "" and len(players) < 4:
         players.append(e.get())
         listbox.insert(END, e.get())
+        e.delete(0, END)
 
 
 def start():
@@ -71,9 +71,5 @@ C.pack()
 win.mainloop()
 
 if len(players) > 1:
-    win = Tk()
-    win.geometry(f"{SIZE}x{SIZE}")
-    win.resizable(False, False)
-    game = GUI(win, players)
-    win.mainloop()
+    run(players)
 

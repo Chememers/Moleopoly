@@ -80,12 +80,12 @@ class SquareGUI:
             self.grid_config["column"] = 9
             self.grid_config["columnspan"] = 2
         elif self.side == "N":
-            self.rotate(90)
+            self.rotate(270)
             self.grid_config["row"] = 0
             self.grid_config["column"] = self.idx + 2
             self.grid_config["rowspan"] = 2
         else:
-            self.rotate(270)
+            self.rotate(90)
             self.grid_config["row"] = 9
             self.grid_config["column"] = 8 - self.idx
             self.grid_config["rowspan"] = 2
@@ -100,7 +100,7 @@ class SquareGUI:
             self.canv_config["height"] = SQLONG
             for text in self.children["txt"]:
                 text.angle = angle
-                if angle == 90:
+                if angle == 270:
                     text.location = (SQSHORT - text.location[1], text.location[0])
                 else:
                     text.location = (text.location[1], text.location[0])
@@ -141,11 +141,11 @@ class ElementSquareGUI(SquareGUI):
         self.put()
 
     def setup(self):
-        self.add_child("txt", Text(self.square.Symbol, (SQSHORT, 32), 32))
+        self.add_child("txt", Text(self.square.Symbol, (SQSHORT, 35), 32))
         self.add_child(
-            "txt", Text(f"{round(float(self.square.AtomicNumber))}", (SQSHORT, 58), 12)
+            "txt", Text(f"{round(float(self.square.AtomicNumber))}", (SQSHORT, 62), 12)
         )
-        self.add_child("txt", Text(self.square.Element, (SQSHORT, 8), 12))
+        self.add_child("txt", Text(self.square.Element, (SQSHORT, 12), 12))
 
 
 class ChanceGUI(SquareGUI):
@@ -175,7 +175,7 @@ class UtilityGUI(SquareGUI):
             size = 24
         else:
             size = 12
-        self.add_child("txt", Text(self.square.name, (SQSHORT, 30), size))
+        self.add_child("txt", Text(self.square.name, (SQSHORT, 35), size))
 
 
 class InfoDisplay(Canvas):
@@ -187,25 +187,48 @@ class InfoDisplay(Canvas):
         self.players = players
         self.colors = ["red", "green", "blue", "yellow"]
         self.update(0)
-    
+
     def update(self, turn):
         self.delete("all")
         for i in range(len(self.players)):
-            if i < 2: x = 50; col = i + 1 
-            else: x = 275; col = i - 1
-            rx = x - 30; ry = x-10
+            if i < 2:
+                x = 50
+                col = i + 1
+            else:
+                x = 275
+                col = i - 1
+            rx = x - 30
+            ry = x - 10
 
-            self.create_rectangle(rx, col*35, ry, (col*35) + 20, fill=self.colors[i])
-            #fill = "white" if turn != i else "green"
-            self.create_text((x, (col) * 35 + 10), text=self.players[i].name, fill="white", font=Font(12), anchor="w")
-            self.create_text((x + 170, (col) * 35 + 10), text=(f"{self.players[i].balance} KJ"), fill="white", font=Font(12), anchor="e")
-        
-        #Show Active Player:
-        x, y = (45, 30); w = 180; h = 35
-        if turn > 1: x += 225
-        if turn % 2 != 0: y += 35
+            self.create_rectangle(
+                rx, col * 35, ry, (col * 35) + 20, fill=self.colors[i]
+            )
+            # fill = "white" if turn != i else "green"
+            self.create_text(
+                (x, (col) * 35 + 10),
+                text=self.players[i].name,
+                fill="white",
+                font=Font(12),
+                anchor="w",
+            )
+            self.create_text(
+                (x + 170, (col) * 35 + 10),
+                text=(f"{self.players[i].balance} KJ"),
+                fill="white",
+                font=Font(12),
+                anchor="e",
+            )
 
-        self.create_rectangle(x, y, x+ w, y + h, outline="#9BF62E", width=3)
+        # Show Active Player:
+        x, y = (45, 30)
+        w = 180
+        h = 35
+        if turn > 1:
+            x += 225
+        if turn % 2 != 0:
+            y += 35
+
+        self.create_rectangle(x, y, x + w, y + h, outline="#9BF62E", width=3)
 
 
 class GUI(Board):
@@ -223,17 +246,14 @@ class GUI(Board):
         ranges = ((1, 8), (9, 16), (17, 24), (25, 32))
 
         for i in range(4):
-            index = 0
             for j in range(*ranges[i]):
+                args = (self.win, self.board[j], dirs[i], j - ranges[i][0])
                 if isinstance(self.board[j], ElementSquare):
-                    self.boxes[j] = ElementSquareGUI(
-                        self.win, self.board[j], dirs[i], index
-                    )
+                    self.boxes[j] = ElementSquareGUI(*args)
                 elif isinstance(self.board[j], Chance):
-                    self.boxes[j] = ChanceGUI(self.win, self.board[j], dirs[i], index)
+                    self.boxes[j] = ChanceGUI(*args)
                 elif isinstance(self.board[j], Utility):
-                    self.boxes[j] = UtilityGUI(self.win, self.board[j], dirs[i], index)
-                index += 1
+                    self.boxes[j] = UtilityGUI(*args)
 
         self.center = Canvas(
             self.win,
@@ -250,11 +270,17 @@ class GUI(Board):
         self.info = InfoDisplay(self.win, self.players)
         self.info.place(x=180, y=250, anchor=NW)
 
-if __name__ == "__main__":
-    players = ("Aditya", "Gowtham", "Hari", "W")
+
+def run(players):
     win = Tk()
     win.config(bg="#bdecb6")
     win.resizable(False, False)
-    game = GUI(win, players)
+    GUI(win, players)
     win.update_idletasks()
     win.mainloop()
+
+
+if __name__ == "__main__":
+    players = ("Aditya", "Gowtham", "Hari", "W")
+    run(players)
+
