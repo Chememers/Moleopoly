@@ -38,14 +38,17 @@ class Corner(Canvas):
         )
         self.text = text
         self.loc = loc
-        self.rect_coords = (65, 65, 85, 85)
         self.create_text((SQSHORT, SQSHORT), text=text, font=Font(25), anchor=CENTER)
-        self.put()
+        self.row, self.col = self.put()
 
     def put(self):
         pairs = ((9, 0), (0, 0), (0, 9), (9, 9))
         row, col = pairs[self.loc]
         self.grid(row=row, column=col, columnspan=2)
+        return (row, col)
+
+    def rect_coords(self):
+        return [self.row*75 + 50, self.col*75 + 50]
 
 
 class SquareGUI:
@@ -270,7 +273,7 @@ class GUI(Board):
         for i in range(32):
             input()
             p.draw()
-            p.position += 2
+            p.position += 1
 
 
 def run(players):
