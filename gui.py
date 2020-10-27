@@ -191,42 +191,19 @@ class InfoDisplay(Canvas):
     def update(self, turn):
         self.delete("all")
         for i in range(len(self.players)):
-            if i < 2:
-                x = 50
-                col = i + 1
-            else:
-                x = 275
-                col = i - 1
+            if i < 2: x = 50; col = i + 1
+            else: x = 275; col = i - 1
             rx = x - 30
             ry = x - 10
 
-            self.create_rectangle(
-                rx, col * 35, ry, (col * 35) + 20, fill=self.colors[i]
-            )
-            # fill = "white" if turn != i else "green"
-            self.create_text(
-                (x, (col) * 35 + 10),
-                text=self.players[i].name,
-                fill="white",
-                font=Font(12),
-                anchor=W,
-            )
-            self.create_text(
-                (x + 170, (col) * 35 + 10),
-                text=(f"{self.players[i].balance} KJ"),
-                fill="white",
-                font=Font(12),
-                anchor=E,
-            )
+            self.create_rectangle(rx, col * 35, ry, (col * 35) + 20, fill=self.colors[i])
+            self.create_text((x, (col) * 35 + 10),text=self.players[i].name,fill="white",font=Font(12),anchor=W)
+            self.create_text((x + 170, (col) * 35 + 10),text=(f"{self.players[i].balance} KJ"),fill="white",font=Font(12),anchor=E)
 
         # Show Active Player:
-        x, y = (45, 30)
-        w = 180
-        h = 35
-        if turn > 1:
-            x += 225
-        if turn % 2 != 0:
-            y += 35
+        x, y = (45, 30); w = 180; h = 35
+        if turn > 1: x += 225
+        if turn % 2 != 0: y += 35
 
         self.create_rectangle(x, y, x + w, y + h, outline="#9BF62E", width=3)
 
@@ -240,6 +217,18 @@ class Dice:
     def roll(self, player: Player):
         a, b, _ = player.roll_die()
 
+class Piece(Player):
+    def __init__(self, master, name: str) -> None:
+        super().__init__(name)
+        self.win = master
+    
+    def coord(self):
+        dirs = {"W": ("x", 20), "N": ("y", 20), "E": ("x", 600), "S": ("y", 600)}
+        spacing = 50
+        orient = dirs[list(dirs.keys())[self.position // 9]]
+        other = "x" if orient[0] == "y" else "y"
+
+        return {orient[0]: orient[1], other: spacing * self.position // 9}
 
 class GUI(Board):
     def __init__(self, master, players: list):
@@ -282,6 +271,9 @@ class GUI(Board):
 
         self.dice = Dice(self.win)
         self.dice.roll(self.current_player())
+
+        p = Piece(self.win, self.players[0])
+        print(p.coord())
 
 
 def run(players):
