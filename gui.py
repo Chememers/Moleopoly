@@ -1,7 +1,7 @@
 from tkinter import  Tk, Canvas
 from tkinter.constants import CENTER, E, NW, RIDGE, W
 from moleopoly import Board, ElementSquare, Chance, Player, Utility
-from const import SQLONG, SQSHORT
+from const import SQLONG, SQSHORT, COLORS
 
 def Font(size):
     return ("Calibri", size, "bold")
@@ -211,18 +211,19 @@ class InfoDisplay(Canvas):
 
 
 class Piece(Player):
-    def __init__(self, boxes, name: str) -> None:
-        super().__init__(name)
+    def __init__(self, master, boxes, name: str, turn) -> None:
+        super().__init__(name, turn)
         self.boxes = boxes
+        self.win = master
+        self.position = 1
     
     def coord(self):
-        pos = self.boxes[self.position]
+        return self.boxes[self.position].rect_coords()
     
     def draw(self):
-        x = self.coord()["x"]; y = self.coord()["y"]
+        pos = self.coord()
         self.canv = Canvas(self.win, bg = "red", width=20, height=20)
-        self.canv.place(x = x, y = y)
-        #self.win.create_rectangle(x, y, x+10, y+10)
+        self.canv.place(x = pos[1], y = pos[0])
 
 class GUI(Board):
     def __init__(self, master, players: list):
@@ -266,13 +267,12 @@ class GUI(Board):
         self.info = InfoDisplay(self.win, self.players)
         self.info.place(x=180, y=250, anchor=NW)
 
-        p = Piece(self, self.current_player())
+        p = Piece(self.win, self.boxes, self.current_player(), self.current_player().turn)
 
-        p.draw()
-        for i in range(10):
+        for i in range(32):
             input()
-            p.position += 1
             p.draw()
+            p.position += 2
 
 
 def run(players):

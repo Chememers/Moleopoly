@@ -18,7 +18,11 @@ answers = list(df["Answer"])
 
 class Board:
     def __init__(self, *args):
-        self.players = [Player(name) for name in args]
+        self.players = []
+        for i in range(len(args)):
+            self.players.append(Player(args[i], i))
+
+        #self.players = [Player(name) for name in args]
         self.turn = 0
 
         self.board = (
@@ -80,12 +84,13 @@ class Chance:
 
 
 class Player:
-    def __init__(self, name):
+    def __init__(self, name, turn):
         self.name = name
         self.position = 0
         self.doubles = False
         self.owned_elements = []
         self.balance = 7500  # starting balance, in Joules
+        self.turn = turn
 
     def roll_die(self):
         a = randint(1, 6)
@@ -104,7 +109,7 @@ class Player:
 
 
 if __name__ == "__main__":
-    p1 = Player("Gowtham")
+    p1 = Player("Gowtham", 1)
 
     b = Board(p1)
     print(b.board)
