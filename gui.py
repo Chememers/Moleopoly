@@ -63,13 +63,13 @@ class SquareGUI:
             "relief": RIDGE,
         }
         # DEFAULT TO WEST EAST, ROTATE WILL MUTATE
-        self.children = {"txt": set()}
+        self.children = set()
         self.win = master
         self.side = side
         self.idx = index
 
-    def add_child(self, type_, data):
-        self.children[type_].add(data)
+    def add_child(self, data):
+        self.children.add(data)
 
     def grid_criteria(self, allRotate=False):
         if self.side == "W":
@@ -95,13 +95,13 @@ class SquareGUI:
 
     def rotate(self, angle):
         if angle == 180:
-            for text in self.children["txt"]:
+            for text in self.children:
                 text.angle = 180
                 text.location = (SQLONG - text.location[0], SQSHORT - text.location[1])
         else:
             self.canv_config["width"] = SQSHORT
             self.canv_config["height"] = SQLONG
-            for text in self.children["txt"]:
+            for text in self.children:
                 text.angle = angle
                 if angle == 270:
                     text.location = (SQSHORT - text.location[1], text.location[0])
@@ -109,14 +109,14 @@ class SquareGUI:
                     text.location = (text.location[1], text.location[0])
 
     def rect_coords(self):
+
         return [self.grid_config["row"] * 75 + 50, self.grid_config["column"]*75+50]
 
     def put(self):
         self.canv = Canvas(self.win, **self.canv_config)
         self.canv.grid(**self.grid_config)
-        for key in self.children:
-            for item in self.children[key]:
-                item.draw(self.canv)
+        for item in self.children:
+            item.draw(self.canv)
 
     def setup(self):
         raise NotImplementedError("Must implement setup method")
@@ -147,11 +147,9 @@ class ElementSquareGUI(SquareGUI):
         self.put()
 
     def setup(self):
-        self.add_child("txt", Text(self.square.Symbol, (SQSHORT, 35), 32))
-        self.add_child(
-            "txt", Text(f"{round(float(self.square.AtomicNumber))}", (SQSHORT, 62), 12)
-        )
-        self.add_child("txt", Text(self.square.Element, (SQSHORT, 12), 12))
+        self.add_child(Text(self.square.Symbol, (SQSHORT, 35), 32))
+        self.add_child(Text(f"{round(float(self.square.AtomicNumber))}", (SQSHORT, 62), 12))
+        self.add_child(Text(self.square.Element, (SQSHORT, 12), 12))
 
 
 class ChanceGUI(SquareGUI):
@@ -164,7 +162,7 @@ class ChanceGUI(SquareGUI):
         self.put()
 
     def setup(self):
-        self.add_child("txt", Text("?", (SQSHORT, 35), 50, "orange"))
+        self.add_child(Text("?", (SQSHORT, 35), 50, "orange"))
 
 
 class UtilityGUI(SquareGUI):
@@ -178,7 +176,7 @@ class UtilityGUI(SquareGUI):
 
     def setup(self):
         size = 24 if self.square.name == "Buret" else 12
-        self.add_child("txt", Text(self.square.name, (SQSHORT, 35), size))
+        self.add_child(Text(self.square.name, (SQSHORT, 35), size))
 
 
 class InfoDisplay(Canvas):
@@ -249,9 +247,6 @@ class GUI(Board):
                     self.boxes[j] = ChanceGUI(*args)
                 elif isinstance(self.board[j], Utility):
                     self.boxes[j] = UtilityGUI(*args)
-
-        # player position = 10
-        # self.boxes[10].rect_position()
 
         self.center = Canvas(
             self.win,
