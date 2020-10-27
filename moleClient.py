@@ -1,7 +1,7 @@
 import socket
 import select
 import errno
-from moleopoly import 
+from moleopoly import *
 
 HEADER_LENGTH = 10
 
