@@ -1,6 +1,6 @@
-from tkinter import Tk, Canvas
-from tkinter.constants import CENTER, NW, RIDGE
-from moleopoly import Board, ElementSquare, Chance, Utility
+from tkinter import PhotoImage, Tk, Canvas
+from tkinter.constants import CENTER, E, NW, RIDGE, W
+from moleopoly import Board, ElementSquare, Chance, Player, Utility
 from const import SQLONG, SQSHORT
 
 
@@ -209,14 +209,14 @@ class InfoDisplay(Canvas):
                 text=self.players[i].name,
                 fill="white",
                 font=Font(12),
-                anchor="w",
+                anchor=W,
             )
             self.create_text(
                 (x + 170, (col) * 35 + 10),
                 text=(f"{self.players[i].balance} KJ"),
                 fill="white",
                 font=Font(12),
-                anchor="e",
+                anchor=E,
             )
 
         # Show Active Player:
@@ -229,6 +229,17 @@ class InfoDisplay(Canvas):
             y += 35
 
         self.create_rectangle(x, y, x + w, y + h, outline="#9BF62E", width=3)
+
+
+class Dice:
+    IMG = {i: PhotoImage(rf"dice\dice_{i}") for i in range(1, 7)}
+
+    def __init__(self, canv: Canvas):
+        self.canv = canv
+        self.canv.create_image()
+
+    def roll(self, player: Player):
+        a, b, _ = player.roll_die()
 
 
 class GUI(Board):
@@ -269,6 +280,9 @@ class GUI(Board):
         )
         self.info = InfoDisplay(self.win, self.players)
         self.info.place(x=180, y=250, anchor=NW)
+
+        self.dice = Dice(self.win)
+        self.dice.roll(self.current_player())
 
 
 def run(players):

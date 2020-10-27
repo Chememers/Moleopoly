@@ -44,6 +44,9 @@ class Board:
             if type(self.board[i]) is int:
                 self.board[i] = ElementSquare(self.board[i])
 
+    def current_player(self):
+        return self.players[self.turn]
+
 
 class ElementSquare(Element):
     def __init__(self, atomic_number):
@@ -91,10 +94,10 @@ class Player:
             self.doubles = True
         else:
             self.doubles = False
-        return a + b
+        return (a, b, a + b)
 
     def move(self):
-        self.position += self.roll_die()
+        self.position += self.roll_die()[2]
         if self.position >= 31:
             self.position -= 31
             self.balance += 10000
