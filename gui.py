@@ -2,7 +2,6 @@ from tkinter import  Tk, Canvas
 from tkinter.constants import CENTER, E, NW, RIDGE, W
 from moleopoly import Board, ElementSquare, Chance, Player, Utility
 from const import SQLONG, SQSHORT
-from PIL import Image, ImageTk
 
 def Font(size):
     return ("Calibri", size, "bold")
@@ -39,6 +38,7 @@ class Corner(Canvas):
         )
         self.text = text
         self.loc = loc
+        self.rect_coords = (65, 65, 85, 85)
         self.create_text((SQSHORT, SQSHORT), text=text, font=Font(25), anchor=CENTER)
         self.put()
 
@@ -61,6 +61,7 @@ class SquareGUI:
         }
         # DEFAULT TO WEST EAST, ROTATE WILL MUTATE
         self.children = {"txt": set()}
+        self.rect_coords = None
         self.win = master
         self.side = side
         self.idx = index
@@ -70,21 +71,25 @@ class SquareGUI:
 
     def grid_criteria(self, allRotate=False):
         if self.side == "W":
+            self.rect_coords = (140, 65, 160, 85)
             self.grid_config["row"] = 8 - self.idx
             self.grid_config["column"] = 0
             self.grid_config["columnspan"] = 2
         elif self.side == "E":
+            self.rect_coords = (140, 65, 160, 85)
             if allRotate:
                 self.rotate(180)
             self.grid_config["row"] = self.idx + 2
             self.grid_config["column"] = 9
             self.grid_config["columnspan"] = 2
         elif self.side == "N":
+            self.rect_coords = (65, 140, 85, 160)
             self.rotate(270)
             self.grid_config["row"] = 0
             self.grid_config["column"] = self.idx + 2
             self.grid_config["rowspan"] = 2
         else:
+            self.rect_coords = (65, 140, 85, 160)
             self.rotate(90)
             self.grid_config["row"] = 9
             self.grid_config["column"] = 8 - self.idx
@@ -171,16 +176,13 @@ class UtilityGUI(SquareGUI):
         self.put()
 
     def setup(self):
-        if self.square.name == "Buret":
-            size = 24
-        else:
-            size = 12
+        size = 24 if self.square.name == "Buret" else 12
         self.add_child("txt", Text(self.square.name, (SQSHORT, 35), size))
 
 
 class InfoDisplay(Canvas):
     def __init__(self, master, players):
-        super().__init__(bg="#D0B0D0", width=460, height=120)
+        super().__init__(master, bg="#D0B0D0", width=460, height=120)
         self.config(
             highlightthickness=0.5, highlightbackground="black",
         )
@@ -245,6 +247,9 @@ class GUI(Board):
                     self.boxes[j] = ChanceGUI(*args)
                 elif isinstance(self.board[j], Utility):
                     self.boxes[j] = UtilityGUI(*args)
+
+        # player position = 10
+        # self.boxes[10].rect_position()
 
         self.center = Canvas(
             self.win,
