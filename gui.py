@@ -61,7 +61,6 @@ class SquareGUI:
         }
         # DEFAULT TO WEST EAST, ROTATE WILL MUTATE
         self.children = {"txt": set()}
-        self.rect_coords = None
         self.win = master
         self.side = side
         self.idx = index
@@ -71,25 +70,21 @@ class SquareGUI:
 
     def grid_criteria(self, allRotate=False):
         if self.side == "W":
-            self.rect_coords = (140, 65, 160, 85)
             self.grid_config["row"] = 8 - self.idx
             self.grid_config["column"] = 0
             self.grid_config["columnspan"] = 2
         elif self.side == "E":
-            self.rect_coords = (140, 65, 160, 85)
             if allRotate:
                 self.rotate(180)
             self.grid_config["row"] = self.idx + 2
             self.grid_config["column"] = 9
             self.grid_config["columnspan"] = 2
         elif self.side == "N":
-            self.rect_coords = (65, 140, 85, 160)
             self.rotate(270)
             self.grid_config["row"] = 0
             self.grid_config["column"] = self.idx + 2
             self.grid_config["rowspan"] = 2
         else:
-            self.rect_coords = (65, 140, 85, 160)
             self.rotate(90)
             self.grid_config["row"] = 9
             self.grid_config["column"] = 8 - self.idx
@@ -109,6 +104,9 @@ class SquareGUI:
                     text.location = (SQSHORT - text.location[1], text.location[0])
                 else:
                     text.location = (text.location[1], text.location[0])
+
+    def rect_coords(self):
+        return [self.grid_config["row"] * 75 + 50, self.grid_config["column"]*75+50]
 
     def put(self):
         self.canv = Canvas(self.win, **self.canv_config)
