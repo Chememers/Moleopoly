@@ -109,6 +109,7 @@ class SquareGUI:
                     text.location = (text.location[1], text.location[0])
 
     def rect_coords(self):
+        #return [self.canv.winfo_rootx(), self.canv.winfo_rooty()]
         return [self.grid_config["row"] * 75 + 50, self.grid_config["column"]*75+50]
 
     def put(self):
@@ -188,7 +189,6 @@ class InfoDisplay(Canvas):
             highlightthickness=0.5, highlightbackground="black",
         )
         self.players = players
-        self.colors = ["red", "green", "blue", "yellow"]
         self.update(0)
 
     def update(self, turn):
@@ -199,7 +199,7 @@ class InfoDisplay(Canvas):
             rx = x - 30
             ry = x - 10
 
-            self.create_rectangle(rx, col * 35, ry, (col * 35) + 20, fill=self.colors[i])
+            self.create_rectangle(rx, col * 35, ry, (col * 35) + 20, fill=COLORS[i])
             self.create_text((x, (col) * 35 + 10),text=self.players[i].name,fill="white",font=Font(12),anchor=W)
             self.create_text((x + 170, (col) * 35 + 10),text=(f"{self.players[i].balance} KJ"),fill="white",font=Font(12),anchor=E)
 
@@ -216,14 +216,15 @@ class Piece(Player):
         super().__init__(name, turn)
         self.boxes = boxes
         self.win = master
-        self.position = 1
+        self.turn = turn
+        self.color = COLORS[self.turn]
     
     def coord(self):
         return self.boxes[self.position].rect_coords()
     
     def draw(self):
         pos = self.coord()
-        self.canv = Canvas(self.win, bg = "red", width=20, height=20)
+        self.canv = Canvas(self.win, bg = self.color, width=20, height=20)
         self.canv.place(x = pos[1], y = pos[0])
 
 class GUI(Board):
