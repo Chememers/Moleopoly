@@ -1,8 +1,8 @@
-from tkinter import PhotoImage, Tk, Canvas
+from tkinter import  Tk, Canvas
 from tkinter.constants import CENTER, E, NW, RIDGE, W
 from moleopoly import Board, ElementSquare, Chance, Player, Utility
 from const import SQLONG, SQSHORT
-
+from PIL import Image, ImageTk
 
 def Font(size):
     return ("Calibri", size, "bold")
@@ -233,13 +233,18 @@ class InfoDisplay(Canvas):
 
 class Dice:
     def __init__(self, canv: Canvas):
-        self.img = {i: PhotoImage(rf"dice\dice_{i}") for i in range(1, 7)}
+        self.img = {i: Image.open(rf"dice\dice_{i}.png") for i in range(1, 7)}
+        self.junk = set()
         self.canv = canv
-        # self.canv.create_image()
+        self.canv.create_rectangle((150, 300, 350, 400), outline="black", width=3)
+        self.update_images(1, 1)
 
     def roll(self, player: Player):
         a, b, _ = player.roll_die()
+        self.update_images(a, b)
 
+    def update_images(self, dice1, dice2):
+        pass
 
 class GUI(Board):
     def __init__(self, master, players: list):
@@ -280,8 +285,8 @@ class GUI(Board):
         self.info = InfoDisplay(self.win, self.players)
         self.info.place(x=180, y=250, anchor=NW)
 
-        self.dice = Dice(self.win)
-        self.dice.roll(self.current_player())
+        self.dice = Dice(self.center)
+        # self.dice.roll(self.current_player())
 
 
 def run(players):
