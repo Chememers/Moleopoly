@@ -283,7 +283,6 @@ class GUI(Board):
 
         self.center.create_rectangle((150, 300, 350, 400), fill="#bdecb6", outline="black", width=3)
 
-    
     def game_over(self):
         return False
     
@@ -291,14 +290,14 @@ class GUI(Board):
         while not self.game_over():
             for i in range(len(self.pieces)):
                 input()
-                c = self.update_dice(self.pieces[i]) 
+                a, b, c = self.pieces[i].roll_die()
+                self.update_dice(a, b) 
                 self.pieces[i].move(c)
                 self.turn += 1; self.turn %= len(self.pieces)
                 self.pieces[i].balance += 100
                 self.info.update(self.turn)
                 
-    def update_dice(self, player):
-        a, b, _ = player.roll_die()
+    def update_dice(self, a, b):
         self.win.img1 = img1 = ImageTk.PhotoImage(Image.open(fr"dice\dice_{a}.png"))
         self.win.img2 = img2 = ImageTk.PhotoImage(Image.open(fr"dice\dice_{b}.png"))
         self.center.create_image((250, 350), image=img1, anchor=E)
