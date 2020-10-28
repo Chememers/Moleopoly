@@ -294,6 +294,7 @@ class GUI(Board):
                 self.turn += 1; self.turn %= len(self.pieces)
                 self.pieces[i].balance += 100
                 self.info.update(self.turn)
+                
 
         self.center.create_rectangle((150, 300, 350, 400), fill="#bdecb6", outline="black", width=3)
 
