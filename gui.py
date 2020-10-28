@@ -1,4 +1,4 @@
-from tkinter import  Frame, Tk, Canvas, Toplevel
+from tkinter import  Frame, Tk, Canvas, Toplevel, Label, Button
 from tkinter.constants import CENTER, E, NW, RIDGE, W
 from moleopoly import Board, ElementSquare, Chance, Player, Utility
 from const import SQLONG, SQSHORT, COLORS
@@ -148,10 +148,10 @@ class ElementSquareGUI(SquareGUI):
         super().__init__(master, side, idx)
         self.square = square
         self.root = master
-        grp = int(self.square.Group)
-        if grp > 10:
-            grp -= 10
-        self.canv_config["bg"] = self.COLORS[grp]
+        self.grp = int(self.square.Group)
+        if self.grp > 10:
+            self.grp -= 10
+        self.canv_config["bg"] = self.COLORS[self.grp]
         self.setup()
         self.grid_criteria()
         self.put()
@@ -164,14 +164,21 @@ class ElementSquareGUI(SquareGUI):
     def raise_window(self):
         win = Toplevel(self.root)
         win.geometry("500x200")
+        bg = self.COLORS[self.grp]
 
-        c = Canvas(win, width=500, height=100, bg = "#bdecb6")
+        c = Frame(win, width=500, height=200, bg = bg)
         if self.square.owned_by is None:
             win.title(f"Buy {self.square.Element}?")
-            c.create_text((10, 20), text=f"Would you like to Buy {self.square.Element} for {self.square.price} KJ?", font=Font(18), anchor = "w")
+            Label(c, text=f"NAME: {self.square.Element}, # {int(self.square.AtomicNumber)}", font = Font(18), bg = bg).place(x=250, y = 20, anchor=CENTER)
+            Label(c, text=f"DISCOVERER: {self.square.Discoverer}, {self.square.Year}", font = Font(18), bg = bg).place(x=250, y = 52, anchor=CENTER)
+            Label(c, text=f"PRICE: {self.square.price} KJ", font = Font(18), bg = bg).place(x=250, y = 84, anchor=CENTER)
+            Label(c, text="Buy?", font = Font(18), bg = bg).place(x = 250, y = 110)
+            #Button(c, text="Yes", color="green", width = 100, height = 20).place(x = 125, y = 140)
+ 
+        else:
+            win.title(f"You have landed on {self.square.owned_by}'s element!")      
         
         c.place(x = 0, y = 0)
-
         win.mainloop()
         return
 
