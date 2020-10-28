@@ -1,6 +1,6 @@
 from tkinter import  Frame, Tk, Canvas, Toplevel
 from tkinter.constants import CENTER, E, NW, RIDGE, W
-from moleopoly import Board, ElementSquare, Chance, Player, Utility, board
+from moleopoly import Board, ElementSquare, Chance, Player, Utility
 from const import SQLONG, SQSHORT, COLORS
 from PIL import ImageTk, Image
 
@@ -122,21 +122,12 @@ class SquareGUI:
     def setup(self):
         raise NotImplementedError("Must implement setup method")
 
-    def raise_window(self):
-        win = Toplevel(self.root)
-        win.geometry("500x300")
-        offsets = {"W": 0, "N": 8, "E": 16, "S": 24}
-        idx = self.idx + 1
-        box = board[idx + offsets[self.side]]
-        c = Canvas(win, width=500, height=300, bg = "#ababab")
-        if type(box) is ElementSquare:
-            if box.owned_by is None:
-                win.title(f"Buy {box.Element}?")
-                c.create_text((140, 20), text=f"Would you like to Buy {box.Element}?", font=Font(18))
-        c.place(x = 0, y = 0)
+    # def raise_window(self):
+    #     win = Toplevel(self.root)
+    #     win.geometry("500x300")
 
-        win.mainloop()
-        return
+    #     win.mainloop()
+    #     return
 
 
 
@@ -170,7 +161,19 @@ class ElementSquareGUI(SquareGUI):
         self.add_child(Text(f"{round(float(self.square.AtomicNumber))}", (SQSHORT, 62), 12))
         self.add_child(Text(self.square.Element, (SQSHORT, 12), 12))
 
+    def raise_window(self):
+        win = Toplevel(self.root)
+        win.geometry("500x200")
 
+        c = Canvas(win, width=500, height=100, bg = "#bdecb6")
+        if self.square.owned_by is None:
+            win.title(f"Buy {self.square.Element}?")
+            c.create_text((10, 20), text=f"Would you like to Buy {self.square.Element} for {self.square.price} KJ?", font=Font(18), anchor = "w")
+        
+        c.place(x = 0, y = 0)
+
+        win.mainloop()
+        return
 
 class ChanceGUI(SquareGUI):
     def __init__(self, master, square: Chance, side, idx):

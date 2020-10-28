@@ -17,7 +17,7 @@ class ElementSquare(Element):
         super(ElementSquare, self).__init__(sym[atomic_number - 1])
         self.owned_by = None
         self.houses = []
-        self.price = (float(self.FirstIonization)/9.223e+18)*6.02e23
+        self.price = round((float(self.FirstIonization)/9.223e+18)*6.02e23)
 
 
 class Utility:
