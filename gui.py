@@ -280,20 +280,15 @@ class GUI(Board):
         self.pieces = [Piece(self.win, self.boxes, player.name, player.turn) for player in self.players]
         self.info = InfoDisplay(self.win, self.pieces)
         self.info.place(x=180, y=250, anchor=NW)
+
+        self.center.create_rectangle((150, 300, 350, 400), fill="#bdecb6", outline="black", width=3)
+
     
     def game_over(self):
         return False
     
     def play(self):
-        self.center.create_rectangle((150, 300, 350, 400), fill="#bdecb6", outline="black", width=3)
-
         while not self.game_over():
-            # for i in range(len(self.players)):
-            #     input() 
-            #     steps = self.update_dice(self.players[i])
-            #     self.pieces[i].move(steps)
-            #     self.turn += 1; self.turn %= len(self.players)
-            self.center.create_rectangle((150, 300, 350, 400), fill="#bdecb6", outline="black", width=3)
             for i in range(len(self.pieces)):
                 input()
                 a, b, c = self.pieces[i].roll_die()
@@ -304,17 +299,11 @@ class GUI(Board):
                 self.info.update(self.turn)
                 
 
-        
-    # def update_dice(self, player: Player):
-    #     a, b, _ = player.roll_die()
-    #     self.center.create_rectangle((150, 300, 350, 400), fill="#bdecb6", outline="black", width=3)
-
     def update_dice(self, a, b):
         self.win.img1 = img1 = ImageTk.PhotoImage(Image.open(fr"dice\dice_{a}.png"))
         self.win.img2 = img2 = ImageTk.PhotoImage(Image.open(fr"dice\dice_{b}.png"))
         self.center.create_image((250, 350), image=img1, anchor=E)
         self.center.create_image((250, 350), image=img2, anchor=W)
-        return _
 
 def run(players):
     win = Tk()
