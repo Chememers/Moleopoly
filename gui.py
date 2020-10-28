@@ -124,7 +124,6 @@ class SquareGUI:
 
     def raise_window(self):
         win = Toplevel(self.root)
-        
         win.mainloop()
         return
 
@@ -304,6 +303,9 @@ class GUI(Board):
         self.update_dice(1, 1) 
 
     def game_over(self):
+        for player in self.pieces:
+            if player.balance >= 30000:
+                return True
         return False
     
     def playturn(self, event):
@@ -312,6 +314,8 @@ class GUI(Board):
         self.pieces[self.turn].move(c)
         self.turn += 1; self.turn %= len(self.pieces)
         self.info.update(self.turn)
+        if self.game_over():
+            self.center.bind("<Button-1>", lambda e: None)
                 
     def update_dice(self, a, b):
         self.win.img1 = img1 = ImageTk.PhotoImage(Image.open(fr"dice\dice_{a}.png"))
