@@ -1,7 +1,8 @@
-from tkinter import  Tk, Canvas
+from tkinter import  Frame, Tk, Canvas
 from tkinter.constants import CENTER, E, NW, RIDGE, W
 from moleopoly import Board, ElementSquare, Chance, Player, Utility
 from const import SQLONG, SQSHORT, COLORS
+from PIL import ImageTk, Image
 
 def Font(size):
     return ("Calibri", size, "bold")
@@ -293,7 +294,14 @@ class GUI(Board):
                 self.info.update(self.turn)
                 print(self.players[i].balance)
 
+        self.center.create_rectangle((150, 300, 350, 400), fill="#bdecb6", outline="black", width=3)
 
+    def update_dice(self, player: Player):
+        a, b, _ = player.roll_die()
+        self.win.img1 = img1 = ImageTk.PhotoImage(Image.open(fr"dice\dice_{a}.png"))
+        self.win.img2 = img2 = ImageTk.PhotoImage(Image.open(fr"dice\dice_{b}.png"))
+        self.center.create_image((250, 350), image=img1, anchor=E)
+        self.center.create_image((250, 350), image=img2, anchor=W)
 
 def run(players):
     win = Tk()
