@@ -11,53 +11,13 @@ Group6 = [8] + [choice([16, 34, 42])]
 Group7 = [9] + [choice([17, 35]), choice([53, 85])]
 Group8 = [2] + [choice([10, 18, 36, 54, 86])]
 
-df = pd.read_csv(r"resources\Questions.csv")
-questions = list(df["Question"])
-answers = list(df["Answer"])
-
-
-class Board:
-    def __init__(self, *args):
-        self.players = []
-        for i in range(len(args)):
-            self.players.append(Player(args[i], i))
-
-        #self.players = [Player(name) for name in args]
-        self.turn = 0
-
-        self.board = (
-            ["Go"]
-            + Group1
-            + [Utility("Bunsen Burner")]
-            + Group2
-            + [Chance(), "Jail"]
-            + Group3
-            + [Utility("Graduated Cylinder"), Chance()]
-            + Group4
-            + ["Mole Hole"]
-            + Group5
-            + [Utility("Buret")]
-            + Group6
-            + [Chance(), "Go to Jail"]
-            + Group7
-            + [Utility("Weight Scale"), Chance()]
-            + Group8
-        )
-
-        for i in range(len(self.board)):
-            if type(self.board[i]) is int:
-                self.board[i] = ElementSquare(self.board[i])
-
-    def current_player(self):
-        return self.players[self.turn]
-
-
 class ElementSquare(Element):
     def __init__(self, atomic_number):
         sym = list(pte["Symbol"])
         super(ElementSquare, self).__init__(sym[atomic_number - 1])
         self.owned_by = None
         self.houses = []
+        self.price = (float(self.FirstIonization)/9.223e+18)*6.02e23
 
 
 class Utility:
@@ -66,7 +26,6 @@ class Utility:
         self.bidders = {}
         self.current_price = 200
         self.name = name
-
 
 class Chance:
     pass
@@ -81,6 +40,48 @@ class Chance:
     # def random_question():
     #     rando = randint(0, len(questions) - 1)
     #     return {questions[rando]: answers[rando]}
+
+board = (
+    ["Go"]
+    + Group1
+    + [Utility("Bunsen Burner")]
+    + Group2
+    + [Chance(), "Jail"]
+    + Group3
+    + [Utility("Graduated Cylinder"), Chance()]
+    + Group4
+    + ["Mole Hole"]
+    + Group5
+    + [Utility("Buret")]
+    + Group6
+    + [Chance(), "Go to Jail"]
+    + Group7
+    + [Utility("Weight Scale"), Chance()]
+    + Group8
+)
+
+df = pd.read_csv(r"resources\Questions.csv")
+questions = list(df["Question"])
+answers = list(df["Answer"])
+
+
+class Board:
+    def __init__(self, *args):
+        self.players = []
+        for i in range(len(args)):
+            self.players.append(Player(args[i], i))
+
+        #self.players = [Player(name) for name in args]
+        self.turn = 0
+
+        self.board = board
+
+        for i in range(len(self.board)):
+            if type(self.board[i]) is int:
+                self.board[i] = ElementSquare(self.board[i])
+
+    def current_player(self):
+        return self.players[self.turn]
 
 
 class Player:
