@@ -302,6 +302,7 @@ class GUI(Board):
                 self.turn += 1; self.turn %= len(self.pieces)
                 self.pieces[i].balance += 100
                 self.info.update(self.turn)
+                
 
         
     # def update_dice(self, player: Player):
