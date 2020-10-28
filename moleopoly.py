@@ -101,11 +101,11 @@ class Player:
             self.doubles = False
         return (a, b, a + b)
 
-    def move(self):
-        self.position += self.roll_die()[2]
-        if self.position >= 31:
-            self.position -= 31
-            self.balance += 10000
+    # def increment(self):
+    #     self.position += self.roll_die()[2]
+    #     if self.position >= 31:
+    #         self.position -= 31
+    #         self.balance += 10000
 
 
 if __name__ == "__main__":

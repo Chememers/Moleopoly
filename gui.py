@@ -214,14 +214,29 @@ class Piece(Player):
         self.win = master
         self.turn = turn
         self.color = COLORS[self.turn]
+        self.canv = Canvas(self.win)
+        self.draw()
     
     def coord(self):
-        return self.boxes[self.position].rect_coords()
+        pos = self.boxes[self.position].rect_coords()
+        if self.position // 9 % 2 == 0:
+            pos[1] += self.turn*25
+        else:
+            pos[0] += self.turn*25
+        return pos
     
     def draw(self):
         pos = self.coord()
+        self.canv.place_forget()
         self.canv = Canvas(self.win, bg = self.color, width=20, height=20)
         self.canv.place(x = pos[1], y = pos[0])
+    
+    def move(self, steps):
+        self.position += steps
+        if self.position >= 32:
+            self.balance += 10000
+            self.position -= 32   
+        self.draw()
 
 class GUI(Board):
     def __init__(self, master, players: list):
@@ -229,6 +244,7 @@ class GUI(Board):
         self.win = master
         self.boxes = [None for _ in range(32)]
         self.setup_board()
+        self.play()
 
     def setup_board(self):
         for i in range(0, len(self.board), 8):
@@ -262,12 +278,21 @@ class GUI(Board):
         self.info = InfoDisplay(self.win, self.players)
         self.info.place(x=180, y=250, anchor=NW)
 
-        p = Piece(self.win, self.boxes, self.current_player(), self.current_player().turn)
+        self.pieces = [Piece(self.win, self.boxes, player.name, player.turn) for player in self.players]
+    
+    def game_over(self):
+        return False
+    
+    def play(self):
+        while not self.game_over():
+            for i in range(len(self.players)):
+                input() 
+                self.pieces[i].move(self.pieces[i].roll_die()[2])
+                self.turn += 1; self.turn %= len(self.players)
+                self.pieces[i].balance += 100
+                self.info.update(self.turn)
+                print(self.players[i].balance)
 
-        for i in range(32):
-            input()
-            p.draw()
-            p.position += 1
 
 
 def run(players):
