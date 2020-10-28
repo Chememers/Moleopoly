@@ -216,6 +216,7 @@ class Piece(Player):
         self.turn = turn
         self.color = COLORS[self.turn]
         self.canv = Canvas(self.win)
+        self.loc = self.coord()
         self.draw()
     
     def coord(self):
@@ -231,13 +232,20 @@ class Piece(Player):
         self.canv.place_forget()
         self.canv = Canvas(self.win, bg = self.color, width=20, height=20)
         self.canv.place(x = pos[1], y = pos[0])
-    
-    def move(self, steps):
-        self.position += steps
-        if self.position >= 32:
+
+    def move_callback(self, i, steps):
+        if i == steps:
+            return
+        self.position += 1
+        if self.position == 32:
+            self.position = 0
             self.balance += 10000
-            self.position -= 32   
         self.draw()
+        self.win.after(250, lambda: self.move_callback(i+1, steps))
+
+    def move(self, steps):
+        self.move_callback(0, steps)
+
 
 class GUI(Board):
     def __init__(self, master, players: list):
