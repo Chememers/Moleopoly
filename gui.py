@@ -276,28 +276,28 @@ class GUI(Board):
         self.center.create_text(
             (250, 40), text="Mole-O-Poly", anchor=CENTER, font=Font(50)
         )
-        self.info = InfoDisplay(self.win, self.players)
-        self.info.place(x=180, y=250, anchor=NW)
 
         self.pieces = [Piece(self.win, self.boxes, player.name, player.turn) for player in self.players]
+        self.info = InfoDisplay(self.win, self.pieces)
+        self.info.place(x=180, y=250, anchor=NW)
     
     def game_over(self):
         return False
     
     def play(self):
         while not self.game_over():
-            for i in range(len(self.players)):
-                input() 
-                self.pieces[i].move(self.pieces[i].roll_die()[2])
-                self.turn += 1; self.turn %= len(self.players)
+            for i in range(len(self.pieces)):
+                input()
+                a, b, c = self.pieces[i].roll_die()
+                self.update_dice(a, b) 
+                self.pieces[i].move(c)
+                self.turn += 1; self.turn %= len(self.pieces)
                 self.pieces[i].balance += 100
                 self.info.update(self.turn)
-                print(self.players[i].balance)
 
         self.center.create_rectangle((150, 300, 350, 400), fill="#bdecb6", outline="black", width=3)
 
-    def update_dice(self, player: Player):
-        a, b, _ = player.roll_die()
+    def update_dice(self, a, b):
         self.win.img1 = img1 = ImageTk.PhotoImage(Image.open(fr"dice\dice_{a}.png"))
         self.win.img2 = img2 = ImageTk.PhotoImage(Image.open(fr"dice\dice_{b}.png"))
         self.center.create_image((250, 350), image=img1, anchor=E)
