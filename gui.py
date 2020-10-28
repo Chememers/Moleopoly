@@ -1,4 +1,4 @@
-from tkinter import  Frame, Tk, Canvas
+from tkinter import  Frame, Tk, Canvas, Toplevel
 from tkinter.constants import CENTER, E, NW, RIDGE, W
 from moleopoly import Board, ElementSquare, Chance, Player, Utility
 from const import SQLONG, SQSHORT, COLORS
@@ -64,6 +64,7 @@ class SquareGUI:
             "relief": RIDGE,
         }
         # DEFAULT TO WEST EAST, ROTATE WILL MUTATE
+        self.root = master
         self.children = set()
         self.win = master
         self.side = side
@@ -121,6 +122,13 @@ class SquareGUI:
     def setup(self):
         raise NotImplementedError("Must implement setup method")
 
+    def raise_window(self):
+        win = Toplevel(self.root)
+        
+        win.mainloop()
+        return
+
+
 
 class ElementSquareGUI(SquareGUI):
     COLORS = (
@@ -138,6 +146,7 @@ class ElementSquareGUI(SquareGUI):
     def __init__(self, master, square: ElementSquare, side, idx):
         super().__init__(master, side, idx)
         self.square = square
+        self.root = master
         grp = int(self.square.Group)
         if grp > 10:
             grp -= 10
@@ -150,6 +159,7 @@ class ElementSquareGUI(SquareGUI):
         self.add_child(Text(self.square.Symbol, (SQSHORT, 35), 32))
         self.add_child(Text(f"{round(float(self.square.AtomicNumber))}", (SQSHORT, 62), 12))
         self.add_child(Text(self.square.Element, (SQSHORT, 12), 12))
+
 
 
 class ChanceGUI(SquareGUI):
@@ -235,6 +245,7 @@ class Piece(Player):
 
     def move_callback(self, i, steps):
         if i == steps:
+            self.boxes[self.position].raise_window()
             return
         self.position += 1
         if self.position == 32:
@@ -253,7 +264,6 @@ class GUI(Board):
         self.win = master
         self.boxes = [None for _ in range(32)]
         self.setup_board()
-        self.play()
 
     def setup_board(self):
         for i in range(0, len(self.board), 8):
@@ -284,25 +294,24 @@ class GUI(Board):
         self.center.create_text(
             (250, 40), text="Mole-O-Poly", anchor=CENTER, font=Font(50)
         )
+        self.center.bind("<Button-1>", self.playturn)
 
         self.pieces = [Piece(self.win, self.boxes, player.name, player.turn) for player in self.players]
         self.info = InfoDisplay(self.win, self.pieces)
         self.info.place(x=180, y=250, anchor=NW)
 
         self.center.create_rectangle((150, 300, 350, 400), fill="#bdecb6", outline="black", width=3)
+        self.update_dice(1, 1) 
 
     def game_over(self):
         return False
     
-    def play(self):
-        while not self.game_over():
-            for i in range(len(self.pieces)):
-                input()
-                a, b, c = self.pieces[i].roll_die()
-                self.update_dice(a, b) 
-                self.pieces[i].move(c)
-                self.turn += 1; self.turn %= len(self.pieces)
-                self.info.update(self.turn)
+    def playturn(self, event):
+        a, b, c = self.pieces[self.turn].roll_die()
+        self.update_dice(a, b)
+        self.pieces[self.turn].move(c)
+        self.turn += 1; self.turn %= len(self.pieces)
+        self.info.update(self.turn)
                 
     def update_dice(self, a, b):
         self.win.img1 = img1 = ImageTk.PhotoImage(Image.open(fr"dice\dice_{a}.png"))
