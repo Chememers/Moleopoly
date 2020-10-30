@@ -4,6 +4,8 @@
 
 **Celebrating Mole Day 2020!** (10/23/2020)
 
+Mole-O-Poly is a chemistry-themed board game inspired by Monopoly™ (Parker Brothers).
+
 ## Installation
 
 Clone or download the repository:
