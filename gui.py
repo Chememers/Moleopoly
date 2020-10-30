@@ -171,6 +171,7 @@ class ElementSquareGUI(SquareGUI):
         
         def buy():
             self.square.sell(player)
+            close()
 
         c = Frame(win, width=500, height=200, bg = bg)
         if self.square.owned_by is None:
@@ -179,7 +180,7 @@ class ElementSquareGUI(SquareGUI):
             Label(c, text=f"DISCOVERER: {self.square.Discoverer}, {self.square.Year}", font = Font(18), bg = bg).place(x=250, y = 52, anchor=CENTER)
             Label(c, text=f"PRICE: {self.square.price} KJ", font = Font(18), bg = bg).place(x=250, y = 84, anchor=CENTER)
             Label(c, text="Do you want to Buy?", font = Font(18), bg = bg).place(x = 250, y = 115, anchor=CENTER)
-            Button(c, text="Yes", bg="green", fg="white", font = Font(12), width = 20, height = 1, command=buy()).place(x = 145, y = 170, anchor=CENTER)
+            Button(c, text="Yes", bg="green", fg="white", font = Font(12), width = 20, height = 1, command=buy).place(x = 145, y = 170, anchor=CENTER)
             Button(c, text="No", bg="red", fg="white", font = Font(12), width = 20, height = 1, command=close).place(x = 345, y = 170, anchor=CENTER)
  
         else:
