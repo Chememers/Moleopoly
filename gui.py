@@ -67,7 +67,6 @@ class Corner(Canvas):
         else:
             win.title("MOLE HOLE!")
             imgopen = Image.open(r"resources\Mole Hole.png").resize((640, 360), Image.ANTIALIAS)
-            win.geometry(f"640x360")
             imgtk = ImageTk.PhotoImage(imgopen)
             lbl = Label(win, image=imgtk)
             lbl.image = imgtk
