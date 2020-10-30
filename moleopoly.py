@@ -27,7 +27,7 @@ class ElementSquare(Element):
 class Utility:
     def __init__(self, name):
         self.starting_price = 200
-        self.bidders = {}
+        self.owned_by = None
         self.current_price = 200
         self.name = name
 
