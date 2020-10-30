@@ -323,7 +323,11 @@ class UtilityGUI(SquareGUI):
             Button(win, text="Buy!", bg="green", font=Font(15),command=buy).grid(row=2, column=0, sticky="we")
             win.update_idletasks()
         else:
-            print(self.square.owned_by)
+            Label(win, text=f"{self.square.owned_by.name} owns {name}!", font = Font(18), bg=self.color).grid(row=0, column=0, sticky="we")
+            img = Label(win, image=imgFile)
+            img.image = imgFile
+            img.grid(row=1, column=0, sticky="we")
+            Button(win, text="OK", bg="blue", fg="white", font = Font(12), command=close).grid(row=2, column=0, sticky="we")
 
         win.mainloop()
         return
@@ -478,7 +482,7 @@ class GUI(Board):
     def playturn(self, event):
         a, b, c = self.pieces[self.turn].roll_die()
         self.update_dice(a, b)
-        self.pieces[self.turn].move(c) # c
+        self.pieces[self.turn].move(14) # c
         self.turn += 1; self.turn %= len(self.pieces)
         self.info.update(self.turn)
         if self.game_over():
