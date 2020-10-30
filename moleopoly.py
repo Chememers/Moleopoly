@@ -18,6 +18,10 @@ class ElementSquare(Element):
         self.owned_by = None
         self.houses = []
         self.price = round((float(self.FirstIonization)/9.223e+18)*6.02e23)
+    
+    def sell(self, buyer):
+        buyer.balance -= self.price
+        self.owned_by = buyer
 
 
 class Utility:

@@ -161,10 +161,16 @@ class ElementSquareGUI(SquareGUI):
         self.add_child(Text(f"{round(float(self.square.AtomicNumber))}", (SQSHORT, 62), 12))
         self.add_child(Text(self.square.Element, (SQSHORT, 12), 12))
 
-    def raise_window(self):
+    def raise_window(self, player):
         win = Toplevel(self.root)
         win.geometry("500x200")
         bg = self.COLORS[self.grp]
+
+        def close():
+            win.destroy()
+        
+        def buy():
+            self.square.sell(player)
 
         c = Frame(win, width=500, height=200, bg = bg)
         if self.square.owned_by is None:
@@ -172,8 +178,9 @@ class ElementSquareGUI(SquareGUI):
             Label(c, text=f"NAME: {self.square.Element}, # {int(self.square.AtomicNumber)}", font = Font(18), bg = bg).place(x=250, y = 20, anchor=CENTER)
             Label(c, text=f"DISCOVERER: {self.square.Discoverer}, {self.square.Year}", font = Font(18), bg = bg).place(x=250, y = 52, anchor=CENTER)
             Label(c, text=f"PRICE: {self.square.price} KJ", font = Font(18), bg = bg).place(x=250, y = 84, anchor=CENTER)
-            Label(c, text="Buy?", font = Font(18), bg = bg).place(x = 250, y = 110)
-            #Button(c, text="Yes", color="green", width = 100, height = 20).place(x = 125, y = 140)
+            Label(c, text="Do you want to Buy?", font = Font(18), bg = bg).place(x = 250, y = 115, anchor=CENTER)
+            Button(c, text="Yes", bg="green", fg="white", font = Font(12), width = 20, height = 1, command=buy()).place(x = 145, y = 170, anchor=CENTER)
+            Button(c, text="No", bg="red", fg="white", font = Font(12), width = 20, height = 1, command=close).place(x = 345, y = 170, anchor=CENTER)
  
         else:
             win.title(f"You have landed on {self.square.owned_by}'s element!")      
@@ -265,7 +272,7 @@ class Piece(Player):
 
     def move_callback(self, i, steps):
         if i == steps:
-            self.boxes[self.position].raise_window()
+            self.boxes[self.position].raise_window(self)
             return
         self.position += 1
         if self.position == 32:
