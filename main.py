@@ -37,8 +37,6 @@ b1 = Button(
     command=add_player,
 )
 e = Entry(win, text="Player Name", width=34)
-f = Entry(win, text="IP", width=20)
-g = Entry(win, text="Port", width=10)
 
 t = Label(win, text="Players:", bg="#34b3ac", fg="white", font=("Comic Sans MS", 16))
 listbox = Listbox(
@@ -61,8 +59,6 @@ play = Button(
     command=start,
 )
 
-g.place(x=230, y=90)
-f.place(x=230, y=60)
 e.place(x=10, y=60)
 e.insert(END, "Player Name")
 b1.place(x=10, y=90)
