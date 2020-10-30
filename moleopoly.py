@@ -51,19 +51,19 @@ class Chance:
     #     return {questions[rando]: answers[rando]}
 
 board = (
-    ["Go"]
+    ["Go!!"]
     + Group1
     + [Utility("Bunsen Burner")]
     + Group2
-    + [Chance(), "Jail"]
+    + [Chance(), "Visiting Jail..."]
     + Group3
     + [Utility("Graduated Cylinder"), Chance()]
     + Group4
-    + ["Mole Hole"]
+    + ["Mole Hole!"]
     + Group5
     + [Utility("Buret")]
     + Group6
-    + [Chance(), "Go to Jail"]
+    + [Chance(), "Go to Jail!"]
     + Group7
     + [Utility("Weight Scale"), Chance()]
     + Group8

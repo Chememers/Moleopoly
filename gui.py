@@ -30,8 +30,10 @@ class Text:
 class Corner(Canvas):
     def __init__(self, root, text, loc):
         super().__init__(root, height=SQLONG, width=SQLONG)
+        self.color = "#CCCCCC"
+        self.root = root
         self.config(
-            bg="#CCCCCC",
+            bg=self.color,
             bd=0,
             highlightthickness=0.5,
             relief=RIDGE,
@@ -39,7 +41,10 @@ class Corner(Canvas):
         )
         self.text = text
         self.loc = loc
-        self.create_text((SQSHORT, SQSHORT), text=text, font=Font(25), anchor=CENTER)
+        size = 22
+        if "Visiting" in text:
+            size = 18
+        self.create_text((SQSHORT, SQSHORT), text=text, font=Font(size), anchor=CENTER)
         self.row, self.col = self.put()
 
     def put(self):
@@ -50,6 +55,26 @@ class Corner(Canvas):
 
     def rect_coords(self):
         return [self.row*75 + 50, self.col*75 + 50]
+
+    def raise_window(self, player):
+        win = Toplevel(self.root)
+        win.config(bg=self.color)
+        win.resizable(False, False)
+        if "jail" in self.text.lower():
+            pass
+        elif "go" in self.text.lower():
+            pass
+        else:
+            win.title("MOLE HOLE!")
+            imgopen = Image.open(r"resources\Mole Hole.png").resize((640, 360), Image.ANTIALIAS)
+            win.geometry(f"640x360")
+            imgtk = ImageTk.PhotoImage(imgopen)
+            lbl = Label(win, image=imgtk)
+            lbl.image = imgtk
+            Label(win, text=f"Welcome to the Mole Hole!", bg="white", font=Font(20)).grid(row=0, column=0, sticky="we")
+            lbl.grid(row=1, column=0, sticky="we")
+
+        win.mainloop()
 
 
 class SquareGUI:
@@ -177,23 +202,6 @@ class ElementSquareGUI(SquareGUI):
             Button(c, text="Yes", bg="green", fg="white", font = Font(12), width = 20, height = 1, command=buy).place(x = 145, y = 170, anchor=CENTER)
             Button(c, text="No", bg="red", fg="white", font = Font(12), width = 20, height = 1, command=close).place(x = 345, y = 170, anchor=CENTER)
  
-        # elif self.square.owned_by.name != player.name:
-        #     player.balance -= self.square.rent
-        #     self.square.owned_by.balance += self.square.rent
-        #     win.title(f"Pay energy to {self.square.owned_by.name}") 
-        #     Label(c, text=f"NAME: {self.square.Element}, # {int(self.square.AtomicNumber)}", font = Font(18), bg = bg).place(x=250, y = 20, anchor=CENTER)
-        #     Label(c, text=f"DISCOVERER: {self.square.Discoverer}, {self.square.Year}", font = Font(18), bg = bg).place(x=250, y = 52, anchor=CENTER)
-        #     Label(c, text=f"PRICE: {self.square.price} KJ", font = Font(18), bg = bg).place(x=250, y = 84, anchor=CENTER)  
-        #     Label(c, text=f"You have paid energy to {self.square.owned_by.name}", font = Font(18), bg = bg).place(x = 250, y = 115, anchor=CENTER)
-        #     Button(c, text="OK", bg="blue", fg="white", font = Font(12), width = 20, height = 1, command=close).place(x = 250, y = 170, anchor=CENTER)
-        
-        # else:
-        #     Label(c, text=f"NAME: {self.square.Element}, # {int(self.square.AtomicNumber)}", font = Font(18), bg = bg).place(x=250, y = 20, anchor=CENTER)
-        #     Label(c, text=f"DISCOVERER: {self.square.Discoverer}, {self.square.Year}", font = Font(18), bg = bg).place(x=250, y = 52, anchor=CENTER)
-        #     Label(c, text=f"PRICE: {self.square.price} KJ", font = Font(18), bg = bg).place(x=250, y = 84, anchor=CENTER)  
-        #     Label(c, text=f"This is your property, {player.name}", font = Font(18), bg = bg).place(x = 250, y = 115, anchor=CENTER)
-        #     Button(c, text="OK", bg="blue", fg="white", font = Font(12), width = 20, height = 1, command=close).place(x = 250, y = 170, anchor=CENTER)
-
         else:
             message = f"This is your property, {player.name}"
             if self.square.owned_by.name != player.name:
@@ -247,10 +255,7 @@ class UtilityGUI(SquareGUI):
         win.geometry("600x550")
         win.config(bg=self.color)
         name = self.square.name
-        if "Burn" in name or "Scale" in name:
-            ext = ".jpg"
-        else:
-            ext = ".png"
+        ext = ".jpg" if "Burn" in name or "Scale" in name else ".png"
         imgFile = ImageTk.PhotoImage(Image.open(fr"utils\{name}{ext}"))
         def close():
             win.destroy()
@@ -395,11 +400,12 @@ class GUI(Board):
     def playturn(self, event):
         a, b, c = self.pieces[self.turn].roll_die()
         self.update_dice(a, b)
-        self.pieces[self.turn].move(3) # c
+        self.pieces[self.turn].move(16) # c
         self.turn += 1; self.turn %= len(self.pieces)
         self.info.update(self.turn)
         if self.game_over():
             self.center.bind("<Button-1>", lambda e: None)
+            self.center.create_text((250, 450), text=f"GAME OVER!\n{self.pieces[self.turn].name} won the game!", font=Font(40), anchor=CENTER)
                 
     def update_dice(self, a, b):
         self.win.img1 = img1 = ImageTk.PhotoImage(Image.open(fr"dice\dice_{a}.png"))
