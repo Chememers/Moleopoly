@@ -3,7 +3,6 @@ from tkinter.constants import CENTER, E, NW, RIDGE, W, END
 from moleopoly import Board, ElementSquare, Chance, Player, Utility
 from const import SQLONG, SQSHORT, COLORS
 from PIL import ImageTk, Image
-from time import sleep
 
 def Font(size):
     return ("Calibri", size, "bold")
