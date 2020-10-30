@@ -315,7 +315,7 @@ class UtilityGUI(SquareGUI):
             close()
         
         if self.square.owned_by is None:
-            Label(win, text=f"Utility - {name}!", bg=self.color, font=Font(20)).grid(row=0, column=0, sticky="we")
+            Label(win, text=f"Equipment - {name}!", bg=self.color, font=Font(20)).grid(row=0, column=0, sticky="we")
             img = Label(win, image=imgFile)
             img.image = imgFile
             img.grid(row=1, column=0, sticky="we")
@@ -412,7 +412,7 @@ class Piece(Player):
         print(f"{self.name}: {self.position}")
         if self.position == 32:
             self.position = 0
-            self.balance += 10000
+            self.balance += 100000
         self.draw()
         self.win.after(250, lambda: self.move_callback(i+1, steps))
 
