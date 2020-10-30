@@ -421,22 +421,6 @@ class Piece(Player):
                 self.jailed = False
         else:
             self.move_callback(0, steps)
-        # if self.position == 17:
-        #     pos = self.boxes[8].rect_coords()
-        #     if self.position // 9 % 2 == 0:
-        #         pos[1] += self.turn*25
-        #     else:
-        #         pos[0] += self.turn*25
-        #     self.canv.place_forget()
-        #     self.canv = Canvas(self.win, bg = self.color, width=20, height=20)
-        #     self.canv.place(x = pos[1], y = pos[0])
-        #     self.jailed = True
-        # if self.jailed:
-        #     self.jailCount += 1
-        #     if self.jailCount == 3:
-        #         self.jailCount = 0
-        #         self.jailed = False
-
 
 class GUI(Board):
     def __init__(self, master, players: list):
