@@ -18,6 +18,7 @@ class ElementSquare(Element):
         self.owned_by = None
         self.houses = []
         self.price = round((float(self.FirstIonization)/9.223e+18)*6.02e23)
+        self.rent = round(self.price*3/4)
     
     def sell(self, buyer):
         buyer.balance -= self.price
@@ -98,7 +99,7 @@ class Player:
         self.position = 0
         self.doubles = False
         self.owned_elements = []
-        self.balance = 7500  # starting balance, in Joules
+        self.balance = 5000000  # starting balance, in Joules
         self.turn = turn
 
     def roll_die(self):
