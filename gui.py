@@ -177,17 +177,12 @@ class ElementSquareGUI(SquareGUI):
             Button(c, text="Yes", bg="green", fg="white", font = Font(12), width = 20, height = 1, command=buy).place(x = 145, y = 170, anchor=CENTER)
             Button(c, text="No", bg="red", fg="white", font = Font(12), width = 20, height = 1, command=close).place(x = 345, y = 170, anchor=CENTER)
  
-        elif self.square.owned_by.name != player.name:
-            player.balance -= self.square.rent
-            self.square.owned_by.balance += self.square.rent
-            win.title(f"Pay energy to {self.square.owned_by.name}") 
-            Label(c, text=f"NAME: {self.square.Element}, # {int(self.square.AtomicNumber)}", font = Font(18), bg = bg).place(x=250, y = 20, anchor=CENTER)
-            Label(c, text=f"DISCOVERER: {self.square.Discoverer}, {self.square.Year}", font = Font(18), bg = bg).place(x=250, y = 52, anchor=CENTER)
-            Label(c, text=f"PRICE: {self.square.price} KJ", font = Font(18), bg = bg).place(x=250, y = 84, anchor=CENTER)  
-            Label(c, text=f"You have paid energy to {self.square.owned_by.name}", font = Font(18), bg = bg).place(x = 250, y = 115, anchor=CENTER)
-            Button(c, text="OK", bg="blue", fg="white", font = Font(12), width = 20, height = 1, command=close).place(x = 250, y = 170, anchor=CENTER)
-        
         else:
+            if self.square.owned_by.name != player.name:
+                player.balance -= self.square.rent
+                self.square.owned_by.balance += self.square.rent
+                win.title(f"Pay energy to {self.square.owned_by.name}")
+
             Label(c, text=f"NAME: {self.square.Element}, # {int(self.square.AtomicNumber)}", font = Font(18), bg = bg).place(x=250, y = 20, anchor=CENTER)
             Label(c, text=f"DISCOVERER: {self.square.Discoverer}, {self.square.Year}", font = Font(18), bg = bg).place(x=250, y = 52, anchor=CENTER)
             Label(c, text=f"PRICE: {self.square.price} KJ", font = Font(18), bg = bg).place(x=250, y = 84, anchor=CENTER)  
@@ -380,7 +375,7 @@ class GUI(Board):
     def playturn(self, event):
         a, b, c = self.pieces[self.turn].roll_die()
         self.update_dice(a, b)
-        self.pieces[self.turn].move(4) # c
+        self.pieces[self.turn].move(c) # c
         self.turn += 1; self.turn %= len(self.pieces)
         self.info.update(self.turn)
         if self.game_over():
