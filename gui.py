@@ -211,21 +211,27 @@ class UtilityGUI(SquareGUI):
         size = 24 if self.square.name == "Buret" else 12
         self.add_child(Text(self.square.name, (SQSHORT, 35), size))
 
-    def purchase(self):
-        pass
 
-    def raise_window(self):
+    def raise_window(self, player):
         win = Toplevel(self.root)
         win.geometry("500x200")
         name = self.square.name
         imgFile = ImageTk.PhotoImage(Image.open(fr"resources\{name}.jpg"))
+        
+        def close():
+            win.destroy()
+        
+        def buy():
+            self.square.sell(player)
+            close()
+        
         if self.square.owned_by is None:
             #if "bunsen" in name.lower():
             Label(win, text="Utility - Bunsen Burner!", font=Font(20)).grid(row=0, column=0, sticky="we")
             img = Label(win, image=imgFile)
             img.image = imgFile
             img.grid(row=1, column=0, sticky="we")
-            Button(win, text="Buy!", bg="white", command=self.purchase)
+            Button(win, text="Buy!", bg="white", command=buy)
         else:
             pass
 

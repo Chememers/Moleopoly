@@ -31,6 +31,10 @@ class Utility:
         self.current_price = 200
         self.name = name
 
+    def sell(self, buyer):
+        buyer.balance -= self.current_price
+        self.owned_by = buyer
+
 class Chance:
     pass
     # qa = pd.read_csv(r"resources\Questions.csv")
