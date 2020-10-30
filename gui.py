@@ -58,13 +58,30 @@ class Corner(Canvas):
         return [self.row*75 + 50, self.col*75 + 50]
 
     def raise_window(self, player):
+        if self.text == "Go!!":
+            return
         win = Toplevel(self.root)
         win.config(bg=self.color)
         win.resizable(False, False)
-        if "jail" in self.text.lower():
-            pass
-        elif "go" in self.text.lower():
-            pass
+        if "visit" in self.text.lower():
+            win.title("Visiting Jail...")
+            imgopen = Image.open(r"resources\Jail.jpg")
+            imgtk = ImageTk.PhotoImage(imgopen)
+            lbl = Label(win, image=imgtk)
+            lbl.image = imgtk
+
+            fee = 10000
+            player.balance -= fee
+            Label(win, text=f"Visiting Jail...Entry fee = {fee}!", bg="white", font=Font(20)).grid(row=0, column=0, sticky="we")
+            lbl.grid(row=1, column=0, sticky="we")
+        elif "jail" in self.text.lower():
+            win.title("GO TO JAIL!")
+            imgopen = Image.open(r"resources\Go to Jail.jpg")
+            imgtk = ImageTk.PhotoImage(imgopen)
+            lbl = Label(win, image=imgtk)
+            lbl.image = imgtk
+            Label(win, text=f"{player.name} going to jail for 3 turns!!", bg="white", font=Font(20)).grid(row=0, column=0, sticky="we")
+            lbl.grid(row=1, column=0, sticky="we")
         else:
             win.title("MOLE HOLE!")
             imgopen = Image.open(r"resources\Mole Hole.png").resize((640, 360), Image.ANTIALIAS)
@@ -227,6 +244,7 @@ class ChanceGUI(SquareGUI):
         super().__init__(master, side, idx)
 
         self.square = square
+        self.canv_config["bg"] = "#cfe0fa"
         self.setup()
         self.grid_criteria(allRotate=True)
         self.put()
@@ -348,8 +366,10 @@ class Piece(Player):
         self.color = COLORS[self.turn]
         self.canv = Canvas(self.win)
         self.loc = self.coord()
+        self.jailed =  False
+        self.jailCount = 0
         self.draw()
-    
+
     def coord(self):
         pos = self.boxes[self.position].rect_coords()
         if self.position // 9 % 2 == 0:
@@ -376,7 +396,23 @@ class Piece(Player):
         self.win.after(250, lambda: self.move_callback(i+1, steps))
 
     def move(self, steps):
-        self.move_callback(0, steps)
+        if not self.jailed:
+            self.move_callback(0, steps)
+        if self.position == 17:
+            pos = self.boxes[8].rect_coords()
+            if self.position // 9 % 2 == 0:
+                pos[1] += self.turn*25
+            else:
+                pos[0] += self.turn*25
+            self.canv.place_forget()
+            self.canv = Canvas(self.win, bg = self.color, width=20, height=20)
+            self.canv.place(x = pos[1], y = pos[0])
+            self.jailed = True
+        if self.jailed:
+            self.jailCount += 1
+            if self.jailCount == 3:
+                self.jailCount = 0
+                self.jailed = False
 
 
 class GUI(Board):
@@ -433,11 +469,7 @@ class GUI(Board):
     def playturn(self, event):
         a, b, c = self.pieces[self.turn].roll_die()
         self.update_dice(a, b)
-<<<<<<< HEAD
-        self.pieces[self.turn].move(7) # c
-=======
-        self.pieces[self.turn].move(16) # c
->>>>>>> ef830a006031909f65c29136d4a8b4e6cd4659f9
+        self.pieces[self.turn].move(8) # c
         self.turn += 1; self.turn %= len(self.pieces)
         self.info.update(self.turn)
         if self.game_over():
@@ -460,6 +492,6 @@ def run(players):
 
 
 if __name__ == "__main__":
-    players = ("Aditya", "Gowtham", "Hari")
+    players = ("Aditya", "Gowtham")
     run(players)
 
