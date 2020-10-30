@@ -1,3 +1,4 @@
 chemlib
 pandas
 mendeleev
+Pillow
