@@ -482,7 +482,7 @@ class GUI(Board):
     def playturn(self, event):
         a, b, c = self.pieces[self.turn].roll_die()
         self.update_dice(a, b)
-        self.pieces[self.turn].move(14) # c
+        self.pieces[self.turn].move(c) # c
         self.turn += 1; self.turn %= len(self.pieces)
         self.info.update(self.turn)
         if self.game_over():
