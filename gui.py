@@ -384,21 +384,9 @@ class Piece(Player):
         self.canv = Canvas(self.win, bg = self.color, width=20, height=20)
         self.canv.place(x = pos[1], y = pos[0])
 
-    def move_callback(self, i, steps):
-        if i == steps:
-            self.boxes[self.position].raise_window(self)
-            return
-        self.position += 1
-        if self.position == 32:
-            self.position = 0
-            self.balance += 10000
-        self.draw()
-        self.win.after(250, lambda: self.move_callback(i+1, steps))
-
-    def move(self, steps):
-        if not self.jailed:
-            self.move_callback(0, steps)
-        if self.position == 17:
+    def jail_verify(self):
+        print(self.position)
+        if self.position == 24:
             pos = self.boxes[8].rect_coords()
             if self.position // 9 % 2 == 0:
                 pos[1] += self.turn*25
@@ -407,12 +395,47 @@ class Piece(Player):
             self.canv.place_forget()
             self.canv = Canvas(self.win, bg = self.color, width=20, height=20)
             self.canv.place(x = pos[1], y = pos[0])
+            self.position = 8
             self.jailed = True
+
+
+    def move_callback(self, i, steps):
+        if i == steps:
+            print(True)
+            self.jail_verify()
+            self.boxes[self.position].raise_window(self)
+            return
+        self.position += 1
+        print(f"{self.name}: {self.position}")
+        if self.position == 32:
+            self.position = 0
+            self.balance += 10000
+        self.draw()
+        self.win.after(250, lambda: self.move_callback(i+1, steps))
+
+    def move(self, steps):
         if self.jailed:
             self.jailCount += 1
             if self.jailCount == 3:
                 self.jailCount = 0
                 self.jailed = False
+        else:
+            self.move_callback(0, steps)
+        # if self.position == 17:
+        #     pos = self.boxes[8].rect_coords()
+        #     if self.position // 9 % 2 == 0:
+        #         pos[1] += self.turn*25
+        #     else:
+        #         pos[0] += self.turn*25
+        #     self.canv.place_forget()
+        #     self.canv = Canvas(self.win, bg = self.color, width=20, height=20)
+        #     self.canv.place(x = pos[1], y = pos[0])
+        #     self.jailed = True
+        # if self.jailed:
+        #     self.jailCount += 1
+        #     if self.jailCount == 3:
+        #         self.jailCount = 0
+        #         self.jailed = False
 
 
 class GUI(Board):
@@ -438,6 +461,8 @@ class GUI(Board):
                     self.boxes[j] = ChanceGUI(*args)
                 elif isinstance(self.board[j], Utility):
                     self.boxes[j] = UtilityGUI(*args)
+
+        print(*self.boxes, sep="\n")
 
         self.center = Canvas(
             self.win,
@@ -469,7 +494,7 @@ class GUI(Board):
     def playturn(self, event):
         a, b, c = self.pieces[self.turn].roll_die()
         self.update_dice(a, b)
-        self.pieces[self.turn].move(c) # c
+        self.pieces[self.turn].move(6) # c
         self.turn += 1; self.turn %= len(self.pieces)
         self.info.update(self.turn)
         if self.game_over():
