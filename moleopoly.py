@@ -123,6 +123,6 @@ if __name__ == "__main__":
 
     b = Board(p1)
     print(b.board)
-    print(len(b.board))
+    #print(len(b.board))
 
-    print(b.board)
+    print(b.board.index("Go to Jail!"))

@@ -254,13 +254,13 @@ class ChanceGUI(SquareGUI):
         
         def verify_ans():
             if e.get() == a:
-                Label(win, text="Correct! +1000 KJ", font = Font(36), fg="green").place(relx = 0.5, rely= 0.5, anchor=CENTER)
-                player.balance += 1000
+                Label(win, text="Correct! +100000 KJ", font = Font(36), fg="green").place(relx = 0.5, rely= 0.5, anchor=CENTER)
+                player.balance += 100000
             else:
-                Label(win, text="Incorrect. -500 KJ", font = Font(36), fg="red").place(relx = 0.5, rely= 0.5, anchor=CENTER)
-                player.balance -= 500
+                Label(win, text="Incorrect. -50000 KJ", font = Font(36), fg="red").place(relx = 0.5, rely= 0.5, anchor=CENTER)
+                player.balance -= 50000
 
-            Button(win, text="OK!", bg="blue", fg="white", font = Font(18), width = 24, height = 1, command=close).place(relx = 0.5, rely = 0.7, anchor=CENTER)
+            Button(win, text="Alright", bg="green", fg="white", font = Font(18), width = 24, height = 1, command=close).place(relx = 0.5, rely = 0.7, anchor=CENTER)
 
         Button(win, text="OK", bg="blue", fg="white", font = Font(12), width = 20, height = 1, command=verify_ans).place(x = 275, y = 525, anchor=CENTER)
         win.mainloop()
@@ -433,11 +433,7 @@ class GUI(Board):
     def playturn(self, event):
         a, b, c = self.pieces[self.turn].roll_die()
         self.update_dice(a, b)
-<<<<<<< HEAD
-        self.pieces[self.turn].move(7) # c
-=======
-        self.pieces[self.turn].move(16) # c
->>>>>>> ef830a006031909f65c29136d4a8b4e6cd4659f9
+        self.pieces[self.turn].move(c) # c
         self.turn += 1; self.turn %= len(self.pieces)
         self.info.update(self.turn)
         if self.game_over():
