@@ -272,13 +272,13 @@ class ChanceGUI(SquareGUI):
         
         def verify_ans():
             if e.get() == a:
-                Label(win, text="Correct! +1000 KJ", font = Font(36), fg="green").place(relx = 0.5, rely= 0.5, anchor=CENTER)
-                player.balance += 1000
+                Label(win, text="Correct! +100000 KJ", font = Font(36), fg="green").place(relx = 0.5, rely= 0.5, anchor=CENTER)
+                player.balance += 100000
             else:
-                Label(win, text="Incorrect. -500 KJ", font = Font(36), fg="red").place(relx = 0.5, rely= 0.5, anchor=CENTER)
-                player.balance -= 500
+                Label(win, text="Incorrect. -50000 KJ", font = Font(36), fg="red").place(relx = 0.5, rely= 0.5, anchor=CENTER)
+                player.balance -= 50000
 
-            Button(win, text="OK!", bg="blue", fg="white", font = Font(18), width = 24, height = 1, command=close).place(relx = 0.5, rely = 0.7, anchor=CENTER)
+            Button(win, text="Alright", bg="green", fg="white", font = Font(18), width = 24, height = 1, command=close).place(relx = 0.5, rely = 0.7, anchor=CENTER)
 
         Button(win, text="OK", bg="blue", fg="white", font = Font(12), width = 20, height = 1, command=verify_ans).place(x = 275, y = 525, anchor=CENTER)
         win.mainloop()
