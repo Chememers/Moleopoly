@@ -3,7 +3,6 @@ from tkinter.constants import CENTER, E, NW, RIDGE, W, END
 from moleopoly import Board, ElementSquare, Chance, Player, Utility
 from const import SQLONG, SQSHORT, COLORS
 from PIL import ImageTk, Image
-from time import sleep
 
 def Font(size):
     return ("Calibri", size, "bold")
@@ -307,7 +306,7 @@ class UtilityGUI(SquareGUI):
         win.config(bg=self.color)
         name = self.square.name
         ext = ".jpg" if "Burn" in name or "Scale" in name else ".png"
-        imgFile = ImageTk.PhotoImage(Image.open(fr"utils\{name}{ext}"))
+        imgFile = ImageTk.PhotoImage(Image.open(fr"resources\utils\{name}{ext}"))
         def close():
             win.destroy()
         
@@ -490,8 +489,8 @@ class GUI(Board):
             self.center.create_text((250, 450), text=f"GAME OVER!\n{self.pieces[self.turn].name} won the game!", font=Font(40), anchor=CENTER)
                 
     def update_dice(self, a, b):
-        self.win.img1 = img1 = ImageTk.PhotoImage(Image.open(fr"dice\dice_{a}.png"))
-        self.win.img2 = img2 = ImageTk.PhotoImage(Image.open(fr"dice\dice_{b}.png"))
+        self.win.img1 = img1 = ImageTk.PhotoImage(Image.open(fr"resources\dice\dice_{a}.png"))
+        self.win.img2 = img2 = ImageTk.PhotoImage(Image.open(fr"resources\dice\dice_{b}.png"))
         self.center.create_image((250, 350), image=img1, anchor=E)
         self.center.create_image((250, 350), image=img2, anchor=W)
 
