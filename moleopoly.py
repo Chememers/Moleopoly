@@ -36,19 +36,19 @@ class Utility:
         buyer.balance -= self.current_price
         self.owned_by = buyer
 
+qa = pd.read_csv(r"resources\Questions.csv")
+questions = list(qa["Question"])
+answers = list(qa["Answer"])
 class Chance:
-    pass
-    # qa = pd.read_csv(r"resources\Questions.csv")
-
     # @classmethod
     # def get_question(cls):
     #     idx = cls.qa.shape[0]
 
     #     return cls.qa
 
-    # def random_question():
-    #     rando = randint(0, len(questions) - 1)
-    #     return {questions[rando]: answers[rando]}
+    def random_question(self):
+        rando = randint(0, len(questions) - 1)
+        return [questions[rando], answers[rando]]
 
 board = (
     ["Go"]
