@@ -216,7 +216,8 @@ class UtilityGUI(SquareGUI):
         super().__init__(master, side, idx)
 
         self.square = square
-        self.canv_config["bg"] = "#ede59d"
+        self.color = "#ede59d"
+        self.canv_config["bg"] = self.color
         self.setup()
         self.grid_criteria()
         self.put()
@@ -228,10 +229,14 @@ class UtilityGUI(SquareGUI):
 
     def raise_window(self, player):
         win = Toplevel(self.root)
-        win.geometry("500x200")
+        win.geometry("600x550")
+        win.config(bg=self.color)
         name = self.square.name
-        imgFile = ImageTk.PhotoImage(Image.open(fr"resources\{name}.jpg"))
-        
+        if "Burn" in name or "Scale" in name:
+            ext = ".jpg"
+        else:
+            ext = ".png"
+        imgFile = ImageTk.PhotoImage(Image.open(fr"utils\{name}{ext}"))
         def close():
             win.destroy()
         
@@ -240,14 +245,14 @@ class UtilityGUI(SquareGUI):
             close()
         
         if self.square.owned_by is None:
-            #if "bunsen" in name.lower():
-            Label(win, text="Utility - Bunsen Burner!", font=Font(20)).grid(row=0, column=0, sticky="we")
+            Label(win, text=f"Utility - {name}!", bg=self.color, font=Font(20)).grid(row=0, column=0, sticky="we")
             img = Label(win, image=imgFile)
             img.image = imgFile
             img.grid(row=1, column=0, sticky="we")
-            Button(win, text="Buy!", bg="white", command=buy)
+            Button(win, text="Buy!", bg="green", font=Font(15),command=buy).grid(row=2, column=0, sticky="we")
+            win.update_idletasks()
         else:
-            pass
+            print(self.square.owned_by)
 
         win.mainloop()
         return
@@ -375,7 +380,7 @@ class GUI(Board):
     def playturn(self, event):
         a, b, c = self.pieces[self.turn].roll_die()
         self.update_dice(a, b)
-        self.pieces[self.turn].move(c)
+        self.pieces[self.turn].move(4) # c
         self.turn += 1; self.turn %= len(self.pieces)
         self.info.update(self.turn)
         if self.game_over():
