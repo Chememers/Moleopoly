@@ -118,18 +118,12 @@ class SquareGUI:
         self.canv.grid(**self.grid_config)
         for item in self.children:
             item.draw(self.canv)
-
+        
     def setup(self):
         raise NotImplementedError("Must implement setup method")
 
-    # def raise_window(self):
-    #     win = Toplevel(self.root)
-    #     win.geometry("500x300")
-
-    #     win.mainloop()
-    #     return
-
-
+    def raise_window(self, player):
+        raise NotImplementedError()
 
 class ElementSquareGUI(SquareGUI):
     COLORS = (
@@ -200,6 +194,7 @@ class UtilityGUI(SquareGUI):
         super().__init__(master, side, idx)
 
         self.square = square
+        self.canv_config["bg"] = "#ede59d"
         self.setup()
         self.grid_criteria()
         self.put()
@@ -208,6 +203,26 @@ class UtilityGUI(SquareGUI):
         size = 24 if self.square.name == "Buret" else 12
         self.add_child(Text(self.square.name, (SQSHORT, 35), size))
 
+    def purchase(self):
+        pass
+
+    def raise_window(self):
+        win = Toplevel(self.root)
+        win.geometry("500x200")
+        name = self.square.name
+        imgFile = ImageTk.PhotoImage(Image.open(fr"resources\{name}.jpg"))
+        if self.square.owned_by is None:
+            #if "bunsen" in name.lower():
+            Label(win, text="Utility - Bunsen Burner!", font=Font(20)).grid(row=0, column=0, sticky="we")
+            img = Label(win, image=imgFile)
+            img.image = imgFile
+            img.grid(row=1, column=0, sticky="we")
+            Button(win, text="Buy!", bg="white", command=self.purchase)
+        else:
+            pass
+
+        win.mainloop()
+        return
 
 class InfoDisplay(Canvas):
     def __init__(self, master, players):
